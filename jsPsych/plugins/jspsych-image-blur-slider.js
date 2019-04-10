@@ -29,13 +29,13 @@ jsPsych.plugins['jspsych-image-blur-slider'] = (function(){
       min: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Min slider',
-        default: 3,
+        default: 3.5,
         description: 'Sets the minimum value of the slider.'
       },
       max: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Max slider',
-        default: 7,
+        default: 6.5,
         description: 'Sets the maximum value of the slider',
       },
       start: {
@@ -95,16 +95,18 @@ jsPsych.plugins['jspsych-image-blur-slider'] = (function(){
 
     var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px;">';
     html += '<div id="jspsych-image-slider-response-fixed_stimulus"><img id="promptimg" src="' + trial.fixed_stimulus + '"></div>';
+    html += '<img src = "fixationcrosses/fixsmaller.png" >'
     html += '<div id="jspsych-image-slider-response-stimulus"><img id="key" src="' + trial.stimulus + '"></div>';
     html += '<div class="jspsych-image-slider-response-container" style="position:relative;">';
     html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-image-slider-response-response"></input>';
     html += '<div>'
     for(var j=0; j < trial.labels.length; j++){
-      var width = 100/(trial.labels.length-1);
-      var left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
-      html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
-      html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
-      html += '</div>'
+          var width = 100/(trial.labels.length-1);
+          var left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
+          html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
+          html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
+          html += '</div>'
+
     }
     html += '</div>';
     html += '</div>';
