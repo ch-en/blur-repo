@@ -1,0 +1,621 @@
+<!-- NOTE THAT RIGHT NOW THIS IS JUST COPY PASTED
+FROM THE EEG EXPERIMENT -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>EEG experiment</title>
+    <script src="jsPsych/jspsych.js"></script>
+    <script src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jsPsych/plugins/jspsych-html-button-response.js"></script>
+    <script src="jsPsych/plugins/jspsych-survey-text.js"></script>
+    <script src="js/socket.io.js"></script>
+    <script src="js/jspsych-netstation.js"></script>
+    <link href="jsPsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <style>
+
+    html, body { width: 100%; height: 100%; margin: 0;}
+
+    .coolButton {
+      width: 200px;
+      height:100px;
+      border: 1px solid #73AD21;
+    }
+    .fixation {
+      font-size: 40px;
+      border: 0;
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-color: white;
+    }
+
+    .stimulus {
+      transform: scale(0.59);
+    }
+
+    </style>
+  </head>
+  <body>
+  </body>
+  <script>
+
+  //STIMULI
+
+    generate_list = function(list) {
+      var output_list = jsPsych.randomization.shuffle(list);
+      while (output_list.length < 1200) {
+        var new_list = jsPsych.randomization.shuffle(list);
+        while (output_list[output_list.length-1] == new_list[0]) {
+          new_list = jsPsych.randomization.shuffle(list);
+        }
+        output_list = output_list.concat(new_list);
+      }
+      return output_list;
+    }
+
+    // list of negative distractors (56)
+    var distractors_neg = [
+      'Animal carcass 6.jpg','Bloody knife 1.jpg','Bloody knife 2.jpg',
+      'Boxing 1.jpg','Car accident 3.jpg','Car accident 4.jpg',
+      'Car crash 2.jpg','Car crash 3.jpg','Cockroach 1.jpg','Cockroach 2.jpg',
+      'Cockroach 3.jpg','Cockroach 4.jpg','Dead bodies 1 (1).jpg',
+      'Dog attack 1.jpg','Dog attack 2.jpg','Dog attack 3.jpg','Dummy 1.jpg',
+      'Explosion 1.jpg','Explosion 2.jpg','Ferret 1.jpg','Fire 7.jpg',
+      'Fire 8.jpg','Gun 1.jpg','Gun 7.jpg','Injury 1.jpg','Injury 2.jpg',
+      'Injury 3.jpg','Injury 4.jpg','Opossum 1.jpg','Police 2.jpg',
+      'Severed finger 1.jpg','Shark 1.jpg','Shark 10.jpg','Shark 11.jpg',
+      'Shark 2.jpg','Shark 4.jpg','Shark 5.jpg','Shark 6.jpg','Shark 7.jpg',
+      'Shooting 1.jpg','Shot 1.jpg','Shot 3.jpg','Snake 1.jpg','Snake 2.jpg',
+      'Snake 3.jpg','Snake 4.jpg','Snake 5.jpg','Snake 6.jpg','Spider 1.jpg',
+      'Spider 2.jpg','Tumor 1.jpg','War 1.jpg','War 2.jpg','War 6.jpg',
+      'Weapon 1 (1).jpg','Wolf 2.jpg',
+    ];
+    distractors_neg = generate_list(distractors_neg);
+
+    // list of neutral distractors (56)
+    var distractors_neu = [
+      'Band 1.jpg','Bear 1.jpg','Bird 2.jpg','Camping 4.jpg','Cat 2.jpg',
+      'Crow 1.jpg','Dancing 3.jpg','Doctor 5.jpg','Dog 2.jpg','Dog 29.jpg',
+      'Elephant 1.jpg','Frisbee 1.jpg','Gazing 6.jpg','Goat 1.jpg',
+      'Goat 2.jpg','Horse 1.jpg','Lamb 1.jpg','Lion 3.jpg','Meerkat 1.jpg',
+      'Neuralll (1).jpg','Neutral face 1.jpg','Neutral pose 1.jpg',
+      'Orangutan 1.jpg','Penguins 2.jpg','Picnic 2.jpg','Picnic 4.jpg',
+      'Pig 1.jpg','Pigeon 2.jpg','School 4.jpg','School 6.jpg',
+      'Sleepy pose 2.jpg','Smiling face 1.jpg','Tiger 2.jpg','Wolf 1.jpg',
+      'Yoga 3.jpg','Zebra 1.jpg',
+      'berkay-gumustekin-402114-unsplash (1) (1).jpg','cattle.jpg',
+      'children-class-classroom-1720186 (1).jpg','cottontail-rabbit.jpg',
+      'dog.jpg','duck-mallard.jpg','horse.png','listening to music.jpg',
+      'look-there-11291743948A00.jpg','mule-deer-doe1.jpg','neutral (1).jpg',
+      'neutrall (1).jpg','ostrich.jpg','person on beach.jpg',
+      'person working.jpg','playing-saxophone-871291665036ZmX.jpg','sheep.png',
+      'swan.jpg','thailand-girl.jpg','zebras.jpg',
+    ];
+    distractors_neu = generate_list(distractors_neu);
+
+    // lists of baselines (252)
+    var baselines = [
+      '02945v.jpg','02947v.jpg','02960v.jpg','02962v.jpg','02971v.jpg',
+      '02977v.jpg','02982v.jpg','02988v.jpg','03041v.jpg','03045v.jpg',
+      '03056v.jpg','03063v.jpg','03066v.jpg','03075v.jpg','03098v.jpg',
+      '03112v.jpg','03114v.jpg','03148v.jpg','03162v.jpg','03180v.jpg',
+      '03201v.jpg','03204v.jpg','03212v.jpg','03217v.jpg','03220v.jpg',
+      '04010v.jpg','04014v.jpg','04021v.jpg','04031v.jpg','04040v.jpg',
+      '04060v.jpg','04062v.jpg','04063v.jpg','04064v.jpg','04085v.jpg',
+      '04086v.jpg','04098v.jpg','04117v.jpg','04130v.jpg','04158v.jpg',
+      '04162v.jpg','04179v.jpg','04193v.jpg','04196v.jpg','04201v.jpg',
+      '04222v.jpg','04229v.jpg','04284v.jpg','04300v.jpg','05131v.jpg',
+      '05139v.jpg','05145v.jpg','05158v.jpg','05161v.jpg','05167v.jpg',
+      '05179v.jpg','05186v.jpg','05189v.jpg','05198v.jpg','05203v.jpg',
+      '05240v.jpg','05242v.jpg','05247v.jpg','05252v.jpg','05255v.jpg',
+      '05264v.jpg','05279v.jpg','05280v.jpg','05292v.jpg','05303v.jpg',
+      '4k-wallpaper-agriculture-clouds-842711.jpg',
+      '99_-_Machu_Picchu_-_Juin_2009.edit3.jpg','Aletschgletscher-Eggishorn.jpg',
+      'Bahia_Onelli_Parque_Nacional_Los_Glaciares_Patagonia_Argentina_Luca_Galuzzi_2005.jpg',
+      'Beach 2.jpg','Beach 3.jpg','Beach 8.jpg','Bridge 1.jpg','Camping 10.jpg','Cold 7.jpg','Desert_View_Indian_Wells.jpg','Dirt 2.jpg','Dock 1.jpg',
+      'Freudenberg_sg_Switzerland.jpg','Grass 6.jpg','Happy pose 3.jpg',
+      'Kocherbaumwald-01.jpg','Lake 13.jpg','Lake 14.jpg','Lake 15.jpg',
+      'Lake 16.jpg','Lake 3.jpg','Lake 4.jpg','Lake 5.jpg','Lake 7.jpg',
+      'Lake 8.jpg','Lake 9.jpg','Linden,_paysage.jpg','Nature 1.jpg',
+      'Nature 2.jpg','Niinsaare_jarv.jpg','Path 1.jpg',
+      'Paysage_enneige_02.jpg','Paysage_karabagh_02.jpg',
+      'Peyto_Lake-Banff_NP-Canada.jpg','Road 1.jpg','Sailing 3.jpg',
+      'Sidewalk 4.jpg','Skijump 1.jpg','Sky 1.jpg','Skyscraper 1.jpg',
+      'Skyscraper 2.jpg','Street 1.jpg','Street 2.jpg','Street 3.jpg',
+      'Street 4.jpg','Street 5.jpg','Sunset 3.jpg','Sunset 4.jpg',
+      'Sunset 5.jpg','Sunset 6.jpg','Waterfall 1.jpg',
+      '__08_-_ITALY_-_Forli_under_snow_-_winter_landscape_of_city_(christmas).jpg',
+      'agriculture-bright-clouds-440731.jpg','agriculture-cereal-clouds-175389.jpg',
+      'agriculture-countryside-crop-259280.jpg','architecture-1314416_1920.jpg',
+      'architecture-956332_1280.jpg','architecture_modern_architecture_852928.jpg',
+      'autumn-in-red-rocks-park.jpg',
+      'autumn-landscape-with-lake-fall-trees-mountains.jpg',
+      'bird-flying-at-sunset.jpg','building12.jpg','building16.jpg',
+      'building2.jpg','building3.jpg','building4.jpg','building5.jpg',
+      'building6.jpg','building8.jpg','building9.jpg',
+      'building_at_national_conservation.jpg',
+      'chicago-skyline-at-night-1476869511p8U.jpg',
+      'church-silhouette-8712964986014Kb.jpg',
+      'city-silhouette-at-sunset-871291580819Esw.jpg','cranes 1.jpg',
+      'dirt-road-or-trail-through-park.jpg','empire-state-building.jpg',
+      'farmhouse1.jpg','farmhouse11.jpg','farmhouse2.jpg',
+      'farmhouse3.jpg','farmhouse4.jpg','farmhouse6.jpg','farmhouse7.jpg',
+      'farmhouse8.jpg','farmhouse9.jpg','field 1.jpg','field 2.jpg',
+      'field 3.jpg','field 4.jpg','flooded-bridge.jpg','foreclosed_home.jpg',
+      'geese-flying-over-lake-at-dusk.jpg','grand-teton-mountains.jpg',
+      'hiking-trail.jpg','hills 1.jpg','hills 3.jpg','hills 4.jpg',
+      'horse_statue.jpg','house1.jpg','house10.jpg','house11.jpg',
+      'house2.jpg','house3.jpg','house6.jpg','house7.jpg','house8.jpg',
+      'kokkari-1523011968Xfr.jpg','lake 1.jpg','lake 2.jpg','lake3.jpg',
+      'landscape1.jpg','landscape11.jpg','landscape12.jpg','landscape13.jpg',
+      'landscape14.jpg','landscape15.jpg','landscape16.jpg','landscape17.jpg',
+      'landscape19.jpg','landscape2.jpg','landscape22.jpg','landscape23.jpg',
+      'landscape29.jpg','landscape3.jpg','landscape31.jpg','landscape33.jpg',
+      'landscape34.jpg','landscape35.jpg','landscape36.jpg','landscape37.jpg',
+      'landscape38.jpg','landscape39.jpg','landscape4.jpg','landscape40.jpg',
+      'landscape6.jpg','landscape7.jpg','landscape8.jpg',
+      'lone-old-cottonwood-tree.jpg','lookout_tower.jpg',
+      'meadow-with-mountain-in-background.jpg','pexels-photo-1048039.jpeg',
+      'pexels-photo-1054289.jpeg','pexels-photo-1261728.jpeg',
+      'pexels-photo-1287089.jpeg','pexels-photo-1837621.jpeg',
+      'pexels-photo-1840893.jpeg','pexels-photo-210617.jpeg',
+      'pexels-photo-221125.jpeg','pexels-photo-259280.jpeg',
+      'pexels-photo-280222.jpeg','pexels-photo-351264.jpeg',
+      'pexels-photo-414491.jpeg','pexels-photo-427676.jpeg',
+      'pexels-photo-440731.jpeg','pexels-photo-459203.jpeg',
+      'pexels-photo-534164.jpeg','pexels-photo-541101.jpeg',
+      'pexels-photo-568236.jpeg','pexels-photo-59321.jpeg',
+      'pexels-photo-750108.jpeg','pexels-photo-808465.jpeg',
+      'pexels-photo-894312.jpeg','red rocks from afar.jpg',
+      'red-rocks-park.jpg','river 1.jpg','road 1(1).jpg','road.jpg',
+      'scenic-mountain-landscape.jpg','seoul-410266_1920.jpg','snowy tree.jpg',
+      'sun-through-winter-tree-branches1.jpg',
+      'sunny-landscape-with-dry-brush-and-mountain-background.jpg',
+      'sunset-over-the-lake.jpg','tennis-court-net-buried-in-snow.jpg',
+      'town-square-in-wroclaw-1539098440MZy.jpg','trees 23.jpg','valley 1.jpg',
+      'valley 2.jpg','vintage-art-deco-storefront.jpg','cyrillic.jpg',
+    ];
+    baselines = generate_list(baselines);
+
+    // lists of left-orienting targets (64)
+    var targets_left = [
+      'Trinity-Church-at-Broadway-and-Wall-Street--071914B95645ADD5.jpg',
+      'architecture-1515475_640.jpg','architecture-2353385_640.jpg',
+      'architecture-3131827_640.jpg','barcelona-1514951_640.jpg',
+      'berlin-51058_640.jpg','brooklyn-bridge-105079_640.jpg','buildin.png',
+      'buildin2.png','buildin3.png','buildin4.jpg','buildin5.jpg',
+      'building1.jpg','building2.jpg','building3.jpg','building4.jpg',
+      'building5.jpg','building6.jpg','building7.jpg','building9.jpg',
+      'italy-building-1206128_1280.jpg','lookout_tower.jpg',
+      'malaysia-2289409_640.jpg','mantahhan.city-view-1100x733.jpg',
+      'mexico_tower_latin_american.jpg','petronas-towers-433081_1920.jpg',
+      'pickfords-wharf-london-1100x733.jpg','river-house-1100x733.jpg',
+      'san-francisco-210230_640.jpg','santorini-1100x733.jpg',
+      'seoul-410266_1920.jpg','transamerica-pyramid-530061_640.jpg',
+      '0034-1-1-1100x734.jpg','alaskan-landscape-1100x733.jpg',
+      'autumn-lakes-1100x733.jpg','autumn-mountains-1100x733.jpg',
+      'autumn-park-1100x733.jpg','blue-lake-1100x733.jpg',
+      'brad-fickeisen-1321179-unsplash.jpg','cactus-809914_640.jpg',
+      'firs-235169_640.jpg','forest-63275_1920.jpg','forest-tree-1100x733.jpg',
+      'landsca.png','landscape-3713115_1920.jpg','landscape20.jpg',
+      'landscape28.jpg','landscape4.png','open-road-1-1100x733.jpg',
+      'picography-electrical-wires-nature-tree-grass-green-blue-sky-1-1100x733.jpg',
+      'picography-green-fields-fence-mountain-blue-sky-eberhard-grossgasteiger-1-1100x725.jpg',
+      'picography-still-lake-mountain-snow-sunset-eberhard-grossgasteiger-1-1100x734.jpg',
+      'road-2601033_640.jpg','shotstash_0036-1-1100x734.jpg',
+      'shotstash_0078-1-1100x734.jpg','shotstash_0110-1-1100x734.jpg',
+      'shotstash_0114-1-1100x734.jpg','shotstash_0160-1-1100x734.jpg',
+      'shotstash_0162-1-1100x734.jpg','shotstash_0167-1-1100x734.jpg',
+      'sunset.png','trees.jpg','trees_autumn_road_nature.jpg',
+      'winter-snow-1100x733.jpg',
+    ];
+    targets_left = generate_list(targets_left);
+
+    // lists of right-orienting targets (64)
+    var targets_right = [
+      'building11.jpg','building13.jpg','building14.jpg','building15.jpg',
+      'building17.jpg','building18.jpg','building19.jpg',
+      'buildings-1031014_640.jpg','central-park-nyc-1100x733.jpg',
+      'chicago-1791002_640.jpg','chicago-673558_640.jpg',
+      'church-2306128_640.jpg','church-3712632_640.jpg','city-3378773_640.jpg',
+      'dinant-2220459_640.jpg','dreifaltigkeitskirche_sandhausen_837699.jpg',
+      'dubai-1113262_640.jpg','empire-state-building-1081929_640.jpg',
+      'empire-view-nyc-450x300.jpg','fishhouse.jpg',
+      'golden-gate-bridge-731207_640.jpg','hamburg-3130099_640.jpg',
+      'home-modern-1100x733.jpg','house-1100x733.jpg',
+      'house-estate-1100x733.jpg','lighthouse-843522_640.jpg',
+      'lisbon-buildings-1100x733.jpg','london-3598951_640.jpg',
+      'picography-trinity-college-dublin-1-1100x733.jpg','rome-3944257_640.jpg',
+      'skyscraper-2175943_640.jpg','skyscraper-3855012_640.jpg',
+      '0003-1-1100x734.jpg','autumn-forest-3786749_640.jpg',
+      'big-sky-country-1100x733.jpg','blea-tarn-lake-district-1100x733.jpg',
+      'cactus-793841_1280.jpg','cornish-landscape-1100x733.jpg',
+      'cuban-landscape-1100x733.jpg','desert-116725_640.jpg',
+      'elyse-turton-1319584-unsplash.jpg','forest.jpg',
+      'igor-oliyarnik-1319281-unsplash.jpg',
+      'john-gibbons-1317527-unsplash.jpg',
+      'joshua-tree-national-park-388139_640.jpg','landscape.jpg',
+      'landscape2.jpg','landscape3.png','landscape32.jpg',
+      'mathijs-delva-1318918-unsplash.jpg','meckl-antal-1310708-unsplash.jpg',
+      'outback-1433180_640.jpg',
+      'picography-log-cabin-mountain-forest-alps-sky-clouds-markus-spiske-1-1100x733.jpg',
+      'picography-man-cycling-path-sea-ocean-water-green-grass-path-stone-1-1100x735.jpg',
+      'picography-summer-field-blue-sky-crops-wheat-corn-warm-1-1100x733.jpg',
+      'sandra-seitamaa-1320580-unsplash.jpg','shotstash_0029-1-1100x734.jpg',
+      'shotstash_0034-1-1100x734.jpg','shotstash_0113-1-1100x734.jpg',
+      'shotstash_0172-1-1100x734.jpg','sunset-3935613_640.jpg',
+      'waterfall-icelandic-1100x733.jpg','western-landscape-1100x733.jpg',
+      'white-flowers-spring-1-1100x733.jpg',
+    ];
+    targets_right = generate_list(targets_right);
+
+  //--------------------------------------------------------------------------
+
+  // PROCEDURE
+
+    // initiliaze timeline
+    var timeline = [];
+    var blockcount = 0;
+    var id = null;
+
+    var id_entry = {
+      type: 'survey-text',
+      questions: [
+        {prompt: 'Enter the participant ID'}
+      ],
+      on_finish: function(data){
+        id = JSON.parse(data.responses).Q0;
+        jsPsych.data.addProperties({participant_id: id});
+      }
+    }
+    timeline.push(id_entry);
+
+    var welcome = {
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment.",
+      choices: ['C'],
+      on_finish: function(){
+        //jsPsych.hardware.netstation.connect();
+        //jsPsych.hardware.netstation.beginSession();
+        //jsPsych.hardware.netstation.sync();
+        //jsPsych.hardware.netstation.startRecording();
+      }
+    };
+    timeline.push(welcome);
+
+    var instructions = {
+      type: "html-button-response",
+      stimulus: "<p>Several images will be presented sequentially. \
+       Each image will only be on the screen for about 100 milliseconds.</p> \
+       <p> One of the images may be rotated 90 degrees right or left. \
+       Watch for this image and remember if it is rotated right or left.</p> \
+       \
+       <p>Images of people and animals will appear, and sometimes they will be unpleasant. \
+       These will never be the rotated target image.</p>",
+       choices: ['Continue']
+    };
+    timeline.push(instructions);
+
+    var practice_instruction = {
+        type: "html-button-response",
+        stimulus: "<p>We will now begin a short practice session.</p>",
+        choices: ['I am ready']
+    }
+    timeline.push(practice_instruction);
+
+    var fixation = {
+      type: "html-button-response",
+      stimulus: '',
+      choices: ['+'],
+      button_html: '<button class="fixation">%choice%</button>',
+      on_start: function(){
+        //jsPsych.hardware.netstation.sync();
+      }
+    };
+
+    // baseline stimuli
+    var b = {
+      type: "html-keyboard-response",
+      stimulus: function() { return "<p><img class= 'stimulus' src='images/" + baselines.pop() + "'></img></p>" },
+      choices: jsPsych.NO_KEYS,
+      trial_duration: jsPsych.timelineVariable('trial_duration'),
+    }
+
+    var pos_4 = {
+      type: "html-keyboard-response",
+      stimulus: function(){
+        // imagine this if statement is checking if this is where a distractor should be...
+        if(jsPsych.timelineVariable('distractor_position', true) == 4){
+          // if the distractor should be here, we get the right kind of distractor...
+          if(jsPsych.timelineVariable('distractor_type', true) == 'neg'){
+            var distractor = distractors_neg.pop();
+            return "<p><img class= 'stimulus' src='images/" + distractor + "'></img></p>"
+          } else if(jsPsych.timelineVariable('distractor_type', true) == 'neu'){
+            var distractor = distractors_neu.pop();
+            return "<p><img class= 'stimulus' src='images/" + distractor + "'></img></p>"
+          } else {
+            var baseline = baselines.pop();
+            return "<p><img class= 'stimulus' src='images/" + baseline + "'></img></p>"
+          }
+        } else {
+          var baseline = baselines.pop();
+          return "<p><img class= 'stimulus' src='images/" + baseline + "'></img></p>"
+        }
+      },
+      choices: jsPsych.NO_KEYS,
+      trial_duration: jsPsych.timelineVariable('trial_duration'),
+    }
+
+    var pos_6 = {
+      type: "html-keyboard-response",
+      stimulus: function(){
+        // imagine this if statement is checking if this is where a distractor OR target should be...
+        if(jsPsych.timelineVariable('distractor_position', true) == 6){
+          if(jsPsych.timelineVariable('distractor_position', true) == 4){
+            // if the distractor should be here, we get the right kind of distractor...
+            if(jsPsych.timelineVariable('distractor_type', true) == 'neg'){
+              var distractor = distractors_neg.pop();
+              return "<p><img class= 'stimulus' src='images/" + distractor + "'></img></p>"
+            } else if(jsPsych.timelineVariable('distractor_type', true) == 'neu'){
+              var distractor = distractors_neu.pop();
+              return "<p><img class= 'stimulus' src='images/" + distractor + "'></img></p>"
+            } else {
+              var baseline = baselines.pop();
+              return "<p><img class= 'stimulus' src='images/" + baseline + "'></img></p>"
+            }
+          }
+        } else if (jsPsych.timelineVariable('distractor_position', true) == 4 && jsPsych.timelineVariable('target_lag', true) == 2) {
+          // if the target should be here, we get the right kind of target...
+          if(jsPsych.timelineVariable('target_orientation', true) == 'left'){
+            var target = targets_left.pop();
+            return "<p><img class= 'stimulus' src='images/" + target + "'></img></p>"
+          } else {
+            var target = targets_right.pop();
+            return "<p><img class= 'stimulus' src='images/" + target + "'></img></p>"
+          }
+        } else {
+          var baseline = baselines.pop();
+          return "<p><img class= 'stimulus' src='images/" + baseline + "'></img></p>"
+        }
+      },
+      choices: jsPsych.NO_KEYS,
+      trial_duration: jsPsych.timelineVariable('trial_duration'),
+    }
+
+    var pos_8 = {
+      type: "html-keyboard-response",
+      stimulus: function(){
+        // imagine this if statement is checking if this is where a target should be...
+        if(jsPsych.timelineVariable('distractor_position', true) == 6 && jsPsych.timelineVariable('target_lag', true) == 2){
+          // if the target should be here, we get the right kind of target...
+          if(jsPsych.timelineVariable('target_orientation', true) == 'left'){
+            var target = targets_left.pop();
+            return "<p><img class= 'stimulus' src='images/" + target + "'></img></p>"
+          } else {
+            var target = targets_right.pop();
+            return "<p><img class= 'stimulus' src='images/" + target + "'></img></p>"
+          }
+        } else {
+          var baseline = baselines.pop();
+          return "<p><img class= 'stimulus' src='images/" + baseline + "'></img></p>"
+        }
+      },
+      choices: jsPsych.NO_KEYS,
+      trial_duration: jsPsych.timelineVariable('trial_duration'),
+    }
+
+    var pos_12 = {
+      type: "html-keyboard-response",
+      stimulus: function(){
+        // imagine this if statement is checking if this is where a target should be...
+        if(jsPsych.timelineVariable('distractor_position', true) == 4 && jsPsych.timelineVariable('target_lag', true) == 8){
+          // if the target should be here, we get the right kind of target...
+          if(jsPsych.timelineVariable('target_orientation', true) == 'left'){
+            var target = targets_left.pop();
+            return "<p><img class= 'stimulus' src='images/" + target + "'></img></p>"
+          } else {
+            var target = targets_right.pop();
+            return "<p><img class= 'stimulus' src='images/" + target + "'></img></p>"
+          }
+        } else {
+          var baseline = baselines.pop();
+          return "<p><img class= 'stimulus' src='images/" + baseline + "'></img></p>"
+        }
+      },
+      choices: jsPsych.NO_KEYS,
+      trial_duration: jsPsych.timelineVariable('trial_duration'),
+    }
+
+    var pos_14 = {
+      type: "html-keyboard-response",
+      stimulus: function(){
+        // imagine this if statement is checking if this is where a distractor should be...
+        if(jsPsych.timelineVariable('distractor_position', true) == 6 && jsPsych.timelineVariable('target_lag', true) == 8){
+          // if the target should be here, we get the right kind of target...
+          if(jsPsych.timelineVariable('target_orientation', true) == 'left'){
+            var target = targets_left.pop();
+            return "<p><img class= 'stimulus' src='images/" + target + "'></img></p>"
+          } else {
+            var target = targets_right.pop();
+            return "<p><img class= 'stimulus' src='images/" + target + "'></img></p>"
+          }
+        } else {
+          var baseline = baselines.pop();
+          return "<p><img class= 'stimulus' src='images/" + baseline + "'></img></p>"
+        }
+      },
+      choices: jsPsych.NO_KEYS,
+      trial_duration: jsPsych.timelineVariable('trial_duration'),
+    }
+
+    var last = {
+      type: "html-keyboard-response",
+      stimulus: function() {
+        return "<p><img class= 'stimulus' src='images/" + baselines.pop() + "'></img></p>"
+      },
+      choices: jsPsych.NO_KEYS,
+      trial_duration: jsPsych.timelineVariable('trial_duration'),
+      post_trial_gap: 1000,
+    }
+
+    var response = {
+      type: 'html-button-response',
+      stimulus: '<p style="position:relative; top:30%">WAS THE IMAGE ROTATED...</p>',
+      choices: ['LEFT Very Sure', 'LEFT Somewhat Sure', 'LEFT Guess', +
+                 'RIGHT Very Sure', 'RIGHT Somewhat Sure', 'RIGHT Guess'
+               ],
+      data : {
+        distractor_position: jsPsych.timelineVariable('distractor_position'),
+        target_lag: jsPsych.timelineVariable('target_lag'),
+        distractor_type: jsPsych.timelineVariable('distractor_type'),
+        target_orientation: jsPsych.timelineVariable('target_orientation'), // variable that will contain info abt target_direction
+        phase: jsPsych.timelineVariable('phase'), // when we get spreadsheet back, we can filter out all test_trial
+      },
+      button_html: [
+        '<button class="jspsych-btn coolButton" style= "position: fixed;  top: 30%;  left: 10%;">LEFT<BR>(VERY SURE)</button>',
+        '<button class="jspsych-btn coolButton" style= "position: fixed;  top: 50%;  left: 10%;">LEFT<BR>(SOMEWHAT SURE)</button>',
+        '<button class="jspsych-btn coolButton" style= "position: fixed;  top: 70%;  left: 10%;">LEFT<BR>(GUESS)</button>',
+        '<button class="jspsych-btn coolButton" style= "position: fixed;  top: 30%;  right: 10%;">RIGHT<BR>(VERY SURE)</button>',
+        '<button class="jspsych-btn coolButton" style= "position: fixed;  top: 50%;  right: 10%;">RIGHT<BR>(SOMEWHAT SURE)</button>',
+        '<button class="jspsych-btn coolButton" style= "position: fixed;  top: 70%;  right: 10%;">RIGHT<BR>(GUESS)</button>'
+      ],
+
+      on_finish: function(data){ // data will contain all properties recorded during the trial, including button_pressed and target_direction
+        if(data.target_orientation == "left"){
+            data.correct = (data.button_pressed == 0 || data.button_pressed == 1);
+        } else if (data.target_orientation == "right"){
+            data.correct = (data.button_pressed == 3 || data.button_pressed == 4);
+        } else {
+            data.correct = null;
+        }
+        /*jsPsych.hardware.netstation.sendEvent({
+          key: 'stm+',
+          timestamp: 0,
+          label: 'distractor',
+          description: 'distractor onset',
+          table: {
+            correct: data.correct,
+            dispos: data.distractor_position,
+            distyp: data.distractor_type,
+            tarori: data.target_orientation,
+            tarlag: data.target_lag
+          }
+        });*/
+      }
+    };
+
+    var parameters = {
+      distractor_position: [4,6],
+      target_lag: [2, 8],
+      distractor_type: ['neg','neu','bas'],
+      target_orientation: ['left', 'right'],
+      trial_duration: [100],
+      phase: ['test']
+    }
+
+    var practice_parameters = {
+      distractor_position: [4,6],
+      target_lag: [2, 8],
+      distractor_type: ['bas'],
+      target_orientation: ['left', 'right'],
+      trial_duration: [200],
+      phase: ['practice']
+    }
+
+    var non_distractor = {
+      distractor_position: null,
+      target_lag: null,
+      distractor_type: null,
+      target_orientation: null,
+      phase: 'test'
+    }
+
+    var trial_types = jsPsych.randomization.factorial(parameters, 1);
+    trial_types.push(non_distractor, non_distractor);
+    var practice_types = jsPsych.randomization.factorial(practice_parameters, 1);
+    var practice_tvs = jsPsych.utils.deepCopy(jsPsych.randomization.shuffle(practice_types));
+    practice_tvs = practice_tvs.concat(jsPsych.utils.deepCopy(jsPsych.randomization.shuffle(practice_types)));
+    for(var i=0; i<practice_tvs.length; i++){
+      if(i < 4){
+        practice_tvs[i].trial_duration = 500;
+      } else if(i < 8) {
+        practice_tvs[i].trial_duration = 150;
+      } else {
+        practice_tvs[i].trial_duration = 100;
+      }
+    }
+
+    var practice_trial = {
+      timeline: [fixation, b, b, b, pos_4, b, pos_6, b, pos_8, b, b, b, pos_12, b, pos_14, b, b, last, response],
+      timeline_variables: practice_tvs
+    }
+    timeline.push(practice_trial);
+
+    var instruction_reminder = {
+      type: "html-keyboard-response",
+      stimulus: "You have now completed the practice phase. We will now begin the real trials. \
+        This is a reminder that you will be searching for a rotated image among the series of upright images. \
+        Please do not blink while the images are on the screen. Press any key to begin.",
+    }
+    timeline.push(instruction_reminder);
+
+    var real_trial = {
+      timeline: [fixation, b, b, b, pos_4, b, pos_6, b, pos_8, b, b, b, pos_12, b, pos_14, b, b, last, response],
+      timeline_variables: trial_types,
+      sample: {
+        type: 'fixed-repetitions', // repeat randomly
+        size: 5,
+      }
+    }
+
+    var break_screen = {
+      type: 'html-keyboard-response',
+      stimulus: "<p><img src='img/break.jpg'></img></p> \
+      <p>This is your opportunity to take a break and rest your eyes. Press any key to continue.</p>",
+      on_finish: function(){blockcount++}
+    }
+
+    var break_node = {
+      timeline: [break_screen],
+      conditional_function: function() {
+        if(blockcount == 4){
+          return false;
+        } else {
+          return true;
+        }
+      },
+    }
+
+    var trial_block = {
+      timeline: [real_trial, break_node],
+      repetitions: 5,
+    }
+    timeline.push(trial_block);
+
+    var congrats = {
+      type: 'html-keyboard-response',
+      stimulus: "<p><img src='img/congrats.gif'></img></p> \
+      <p>Well done, you made it! Press any key to continue.</p>",
+    }
+    timeline.push(congrats);
+
+    var debrief = {
+      type: "html-keyboard-response",
+      stimulus: 'Congratulations! You have completed all of the trials. Thank you for helping us with our research!',
+      on_start: function(){
+        jsPsych.data.get().localSave('csv','participant_'+id+'_behavioral.csv');
+      }
+    };
+    timeline.push(debrief);
+
+    jsPsych.init({
+      timeline: timeline,
+    });
+
+    </script>
+  </html>
