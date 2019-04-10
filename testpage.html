@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>EEG experiment</title>
+    <script src="jsPsych/jspsych.js"></script>
+    <link href="jsPsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jsPsych/plugins/jspsych-html-slider-response.js"></script>
+    <script src="jsPsych/plugins/jspsych-image-blur-slider.js"></script>
+
+    <style>
+    </style>
+
+    </head>
+    <body></body>
+    <script>
+        /* create timeline */
+       var timeline = [];
+
+       /* define welcome message trial */
+       var welcome = {
+         type: "html-keyboard-response",
+         stimulus: "Welcome to the experiment. Press any key to begin."
+       };
+       timeline.push(welcome);
+
+       /* define instructions trial */
+       var instructions = {
+         type: "jspsych-image-blur-slider",
+         // type: "html-slider-response",
+         fixed_stimulus: "much2.png", // have it already blurred
+         stimulus: "mchu2.png",
+         post_trial_gap: 2000
+       };
+       timeline.push(instructions);
+
+       /* start the experiment */
+       jsPsych.init({
+         timeline: timeline
+       });
+
+    </script>
+</html>

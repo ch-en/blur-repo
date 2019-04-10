@@ -1,0 +1,13 @@
+- do the blurring on load -- right now it starts at 0, but you need to
+have it blurred when the page loads
+
+- randomize the levels yourself
+
+- make sure you load the CSS style sheet on the html page
+
+
+FOR ATTENTIONAL PROBING:
+- make the text box in a div container that's like 90% of the window size
+- bc you want the attentional probe to flash over a letter in the word,
+  make the attentional probe 10% radius and put the attentional probe IN
+  the div container
