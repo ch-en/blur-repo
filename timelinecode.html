@@ -1,73 +1,4 @@
-<!-- NOTE THAT RIGHT NOW THIS IS JUST COPY PASTED
-FROM THE EEG EXPERIMENT -->
-
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>EEG experiment</title>
-    <script src="jsPsych/jspsych.js"></script>
-    <script src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="jsPsych/plugins/jspsych-html-button-response.js"></script>
-    <script src="jsPsych/plugins/jspsych-survey-text.js"></script>
-    <script src="js/socket.io.js"></script>
-    <script src="js/jspsych-netstation.js"></script>
-    <link href="jsPsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
-    <style>
-
-    html, body { width: 100%; height: 100%; margin: 0;}
-
-    .coolButton {
-      width: 200px;
-      height:100px;
-      border: 1px solid #73AD21;
-    }
-    .fixation {
-      font-size: 40px;
-      border: 0;
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      left: 0;
-      top: 0;
-      background-color: white;
-    }
-
-    .stimulus {
-      transform: scale(0.59);
-    }
-
-    </style>
-  </head>
-  <body>
-  </body>
-  <script>
-
-  //STIMULI
-
-    generate_list = function(list) {
-      var output_list = jsPsych.randomization.shuffle(list);
-      while (output_list.length < 1200) {
-        var new_list = jsPsych.randomization.shuffle(list);
-        while (output_list[output_list.length-1] == new_list[0]) {
-          new_list = jsPsych.randomization.shuffle(list);
-        }
-        output_list = output_list.concat(new_list);
-      }
-      return output_list;
-    }
-
-  //--------------------------------------------------------------------------
-
-  // PROCEDURE
-
-    // initiliaze timeline
-    var timeline = [];
-    var blockcount = 0;
-    var id = null;
-
-    <!DOCTYPE html>
     <html>
     	<head>
     		<title>My experiment</title>
@@ -78,163 +9,56 @@ FROM THE EEG EXPERIMENT -->
     	</head>
     	<body></body>
     	<script>
+            var timeline = [];
 
-        var timeline = [];
+            var break = {
 
-        var hello_trial = {
-            type: 'html-keyboard-response',
-            stimulus: 'Hello! Thank you for participating in this experiment. Press any key to continue.'
-        }
-        timeline.push(hello_trial);
+            }
 
-        var trial_instructions1 = {
-        	type: 'html-keyboard-response',
-        	stimulus: '<p> In this experiment, we will measure how well you can detect fine-grain blurs. </p><p>There will be a fixation cross on the center of the screen, with a four-letter target string above the cross and a test string below the cross. You will keep your eyes fixated on the fixation cross while changing the blur of the bottom test string to match the blur of the top target string. '+'<p>There will also be small attentional probes that flash during the trials, and you should indicate whenever you see the flash by pressing the spacebar. </p>'
-        }
-        timeline.push(trial_instructions1);
+            // practice trials
+            var probe_instructions = {
 
-        // Edit
-        var trial_instructions2 = {
-        	type: 'html-keyboard-response',
-        	stimulus: 'When you are ready to start the practice trials, press any key. ' + ' Remember to use the arrow keys(??) for the blur adjustment task and to press the spacebar whenever you see a flash.'
-        }
-        timeline.push(trial_instructions2);
+            }
 
-        // practice trials
-        var probe_instructions = {
+            var probe_practice = {
 
-        }
+            }
 
-        var probe_practice = {
+            var blur_instructions = {
 
-        }
+            }
 
-        var blur_instructions = {
+            var blur_practice = {
 
-        }
+            }
 
-        var blur_practice = {
+            var task_instructions = {
 
-        }
+            }
 
-        var task_instructions = {
+            var task_practice = {
 
-        }
+            }
 
-        var task_practice = {
+            var practice_block = {
+            // here, we will ensure that the order in which participants undergo
+            //     practice is randomized
+            // result should be a list containing (1) first phase instructions
+            //     (2) first phase trials, repeated as desired (3) second phase
+            //     instructions (4) second phase trials, repeated as desired
+            //     (5) third phase instructions (6) third phase trials, repeated as
+            //     desired
 
-        }
+            }
+            timeline.push(practice_block);
 
-        var practice_block = {
-        /* here, we will ensure that the order in which participants undergo
-            practice is randomized */
-        /* result should be a list containing (1) first phase instructions
-            (2) first phase trials, repeated as desired (3) second phase
-            instructions (4) second phase trials, repeated as desired
-            (5) third phase instructions (6) third phase trials, repeated as
-            desired */
+            var trial_block = {
 
-        }
-        timeline.push(practice_block);
+            }
+            timeline.push(trial_block);
 
-        var trial_block = {
-
-        }
-        timeline.push(trial_block);
-
-        // Test stimuli: two images at a time and fixation target
-        // 64 trials per participant
-        // 16 combos per word
-        var test_stimuli = [
-            // Word 1
-            { stimulus_string: "much", target_string: "mchu", blur_level: "3", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful:true},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: true},
-            { stimulus_string: "mchu", target_string: "much", blur_level: "3", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: false},
-            { stimulus_string: "much", target_string: "much", blur_level: "3", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful:true},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: true},
-            { stimulus_string: "mchu", target_string: "mchu", blur_level: "3", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: false},
-            // Word 2
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful:true},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful:true},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: false},
-            // Word 3
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful:true},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful:true},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: false},
-            // Word 3
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful:true},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful:true},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: true},
-            { stimulus_string: "", target_string: "", blur_level: "3", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "4", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "6", stimulus_meaningful: false},
-            { stimulus_string: "", target_string: "", blur_level: "7", stimulus_meaningful: false},
-            // etc - 4 words per participant
-        ]
-
-        var test = {
-        type: "image-keyboard-response",
-        stimulus: jsPsych.timelineVariable('stimulus'),
-        choices: [] // record initial value, every time the value is changed thruout the exper
-    }
-
-        jsPsych.init({
-            timeline: timeline //how do you add multiple objects to the timeline?
-        });
-
+            jsPsych.init({
+              timeline: timeline,
+            });
         </script>
-
-
     </html>
-
-    jsPsych.init({
-      timeline: timeline,
-    });
-
-    </script>
-  </html>
