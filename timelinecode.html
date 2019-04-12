@@ -128,6 +128,14 @@
             }
             timeline.push(all_trials);
 
+            // SAVE DATA TO DATABASE
+
+            var debrief = {
+                type: 'html-keyboard-response',
+                stimulus: "Congratulations! You have completed all of the trials. Thank you for helping us with our research. <p>In this experiment, we investigate a purposed effect of knowledge on perception by Gary Lupyan. In Lupyan’s experiment, participants made meaningless––but not meaningful––letters sharper when adjusting them in relation to meaningful letters, a result which suggests that meaningful letters look sharper than meaningless ones. We propose that such an effect might be influenced by the way participants allocate physically directed and mentally directed attention. In this experiment, we ask you to perform the same task with your gaze fixed, so that your physically directed attention is equally allocated between the meaningful and meaningless letters. We use flashes to detect your mental attention to see if it is unequally allocated to the meaningful and meaningless letters. We hypothesize that a difference in your mental attention might cause you to make meaningless letters sharper when adjusting them to meaningful strings. </p>"
+            }
+            timeline.push(debrief);
+
             jsPsych.init({
               timeline: timeline,
             });
