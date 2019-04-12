@@ -38,9 +38,9 @@
             console.log(trial_types)
             var timeline_variables = [];
             for (const i of trial_types) {
-                word = i[0]
-                target = word.concat(i[2], '.png')
-                test = word.concat(i[1], '.png')
+                s = 'stimuli/'
+                target = s.concat(i[0], i[2], '.png')
+                test = s.concat(i[0], i[1], '.png')
                 blur = i[3]
                 timeline_variables.push({
                     target_stimulus: target, test_stimulus: test,
