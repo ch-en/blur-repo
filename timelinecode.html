@@ -25,7 +25,6 @@
             var test_m = [0, meaningless];
             var target_m = [0, meaningless];
             var blur = [3, 4, 6, 7];
-
             var trial_types = [];
             for (const i of words) {
                 for (const j of test_m) {
@@ -37,7 +36,6 @@
                 }
             }
             console.log(trial_types)
-
             var timeline_variables = [];
             for (const i of trial_types) {
                 word = i[0]
@@ -49,9 +47,7 @@
                     targetBlur : blur
                 })
             }
-
             var timeline = [];
-
             // // screen between trials
             // var break_screen = {
             //     type: 'html-keyboard-response',
@@ -95,14 +91,12 @@
             //
             // }
             // timeline.push(practice_block);
-
             var trial = {
                 type: 'jspsych-blurry-word',
                 target_stimulus: jsPsych.timelineVariable('target_stimulus'),
                 test_stimulus: jsPsych.timelineVariable('test_stimulus'),
                 targetBlur: jsPsych.timelineVariable('targetBlur')
             }
-
             var all_trials = {
                 timeline: [trial],
                 timeline_variables: timeline_variables,
@@ -110,7 +104,6 @@
                 repetitions: 1
             }
             timeline.push(all_trials);
-
             jsPsych.init({
               timeline: timeline,
             });
