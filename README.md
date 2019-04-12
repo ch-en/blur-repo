@@ -1,1 +1,1 @@
-# blurred-word
+Use 'jspsych-blurry-word' plugin.

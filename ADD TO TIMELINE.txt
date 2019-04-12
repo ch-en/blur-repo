@@ -1,0 +1,58 @@
+//PROMPTBLUR PARAMETER TO PASS IN
+promptBlurs[Math.floor(Math.random()*promptBlurs.length)];
+// randomize if the blur level is 3,4,6,7
+var promptBlurs = [3,4,6,7];
+
+
+//STIMULI
+    generate_list = function(list, min_target_length) {
+      var output_list = jsPsych.randomization.shuffle(list);
+      while (output_list.length < min_target_length) {
+        var new_list = jsPsych.randomization.shuffle(list);
+        while (output_list[output_list.length-1] == new_list[0]) {
+          new_list = jsPsych.randomization.shuffle(list);
+        }
+        output_list = output_list.concat(new_list);
+      }
+      return output_list;
+    }
+
+    // list of target strings
+    var target = [
+      'Animal carcass 6.jpg','Bloody knife 1.jpg','Bloody knife 2.jpg',
+      'Boxing 1.jpg','Car accident 3.jpg','Car accident 4.jpg',
+      'Car crash 2.jpg','Car crash 3.jpg','Cockroach 1.jpg','Cockroach 2.jpg',
+      'Cockroach 3.jpg','Cockroach 4.jpg','Dead bodies 1 (1).jpg',
+      'Dog attack 1.jpg','Dog attack 2.jpg','Dog attack 3.jpg','Dummy 1.jpg',
+      'Explosion 1.jpg','Explosion 2.jpg','Ferret 1.jpg','Fire 7.jpg',
+      'Fire 8.jpg','Gun 1.jpg','Gun 7.jpg','Injury 1.jpg','Injury 2.jpg',
+      'Injury 3.jpg','Injury 4.jpg','Opossum 1.jpg','Police 2.jpg',
+      'Severed finger 1.jpg','Shark 1.jpg','Shark 10.jpg','Shark 11.jpg',
+      'Shark 2.jpg','Shark 4.jpg','Shark 5.jpg','Shark 6.jpg','Shark 7.jpg',
+      'Shooting 1.jpg','Shot 1.jpg','Shot 3.jpg','Snake 1.jpg','Snake 2.jpg',
+      'Snake 3.jpg','Snake 4.jpg','Snake 5.jpg','Snake 6.jpg','Spider 1.jpg',
+      'Spider 2.jpg','Tumor 1.jpg','War 1.jpg','War 2.jpg','War 6.jpg',
+      'Weapon 1 (1).jpg','Wolf 2.jpg',
+    ];
+    strings_target = generate_list(target, 200);
+
+	// list of test strings
+    var test = [
+      'Band 1.jpg','Bear 1.jpg','Bird 2.jpg','Camping 4.jpg','Cat 2.jpg',
+      'Crow 1.jpg','Dancing 3.jpg','Doctor 5.jpg','Dog 2.jpg','Dog 29.jpg',
+      'Elephant 1.jpg','Frisbee 1.jpg','Gazing 6.jpg','Goat 1.jpg',
+      'Goat 2.jpg','Horse 1.jpg','Lamb 1.jpg','Lion 3.jpg','Meerkat 1.jpg',
+      'Neuralll (1).jpg','Neutral face 1.jpg','Neutral pose 1.jpg',
+      'Orangutan 1.jpg','Penguins 2.jpg','Picnic 2.jpg','Picnic 4.jpg',
+      'Pig 1.jpg','Pigeon 2.jpg','School 4.jpg','School 6.jpg',
+      'Sleepy pose 2.jpg','Smiling face 1.jpg','Tiger 2.jpg','Wolf 1.jpg',
+      'Yoga 3.jpg','Zebra 1.jpg',
+      'berkay-gumustekin-402114-unsplash (1) (1).jpg','cattle.jpg',
+      'children-class-classroom-1720186 (1).jpg','cottontail-rabbit.jpg',
+      'dog.jpg','duck-mallard.jpg','horse.png','listening to music.jpg',
+      'look-there-11291743948A00.jpg','mule-deer-doe1.jpg','neutral (1).jpg',
+      'neutrall (1).jpg','ostrich.jpg','person on beach.jpg',
+      'person working.jpg','playing-saxophone-871291665036ZmX.jpg','sheep.png',
+      'swan.jpg','thailand-girl.jpg','zebras.jpg',
+    ];
+    strings_test = generate_list(test, 200);
