@@ -1,5 +1,8 @@
-// parameters needed:
-// add attentionProbe, attentionProbeDuration, attentionProbeDelay to the timeline (for each trial)
+// parameters needed in timeline:
+// add trial.attentionProbe, trial.attentionProbeDuration,
+// trial.attentionProbeDelay, trial.targetBlur
+
+//to the timeline (for each trial)
 
 
 jsPsych.plugins['jspsych-blurry-word'] = (function(){
@@ -97,7 +100,8 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
     var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px;">';
     html += '<div id="jspsych-image-slider-response-fixed_stimulus"><img id="promptimg" src="' + trial.fixed_stimulus + '"></div>';
 
-    html += '<img src = "fixationcrosses/fixsmaller.png" >'
+    html += '<button id="jspsych-image-slider-response-next" class="jspsych-btn" style = "border: none;">'
+            + '<div style="z-index:101"><img src = "fixationcrosses/fixsmaller.png"></div></button>'
 
     html += '<div id="jspsych-image-slider-response-stimulus"><img id="key" src="' + trial.stimulus + '" style="blur: 5px"></div>';
     html += '<div class="jspsych-image-slider-response-container" style="position:relative;">';
@@ -120,12 +124,14 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
     }
 
     // add submit button
-    html += '<button id="jspsych-image-slider-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
+    // html += '<button id="jspsych-image-slider-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
+
 
     // adding attention probe
+    // RANDOMIZE POSITION.
     if(trial.attentionProbe == "up"){
         html += '<div id="attnProbe" style="visibility: hidden; position: absolute; z-index:100;">'
-    } else if(trial.attentionProve == "down"){
+    } else if(trial.attentionProbe == "down"){
         html += '<div id="attnProbe" style="visibility: hidden; position: absolute; z-index:100;">'
     }
     if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
@@ -151,8 +157,8 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
 
     // make the parameter in the timeline so you can store it
 
-    // PASS IN THE PROMPTBLUR PARAMETER FROM TIMELINE
-    document.querySelector("#promptimg").style.filter = "blur(" + "5" + "px)";
+    // PASS IN THE TARGETBLUR PARAMETER FROM TIMELINE
+    document.querySelector("#promptimg").style.filter = "blur(" + trial.targetBlur + "px)";
     display_element.querySelector('#jspsych-image-slider-response-response').addEventListener('mousemove', function() {
       response.response = display_element.querySelector('#jspsych-image-slider-response-response').value;
 
