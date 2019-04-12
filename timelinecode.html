@@ -54,27 +54,50 @@
                 type: 'jspsych-blurry-word'
             }
 
-            // // practice trials
-            // var probe_instructions = {
+            // practice trials
+            var initial_instructions1 = {
+                type: 'html-keyboard-response',
+                stimulus: "Thank you for participating. In this task, you will be shown two sets of letters of varying levels of blurriness. <p>In each trial, you will see a fixation target in the center of the screen. Your goal is to look at the fixation target and, <i>without shifting your gaze</i>, adjust the blurriness of the letters on the bottom to match the blurriness of the top letters as best as you can. </p> <p>Press any key to continue through the instructions.</p>"
+            }
+            timeline.push(initial_instructions1);
+
+            var initial_instructions2 = {
+                type: 'html-keyboard-response',
+                stimulus: "<p>Your gaze should be on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider to adjust the blurriness of the letters. Moving the slider to the right will make the letters blurrier. Moving the slider to the left will make the letters sharper.<p> When you are done adjusting, press any key to go to the next trial. </p><p>During the trials, you may see a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the <strong>spacebar</strong> immediately. </p>"
+            }
+            timeline.push(initial_instructions2);
+
+            var initial_instructions3 = {
+                type: 'html-keyboard-response',
+                stimulus: "The first few trials will give you some practice with the task. You will first practice adjusting the blurriness and detecting the flash separately. Then you will practice them in the same trial. You may start by clicking the mouse to start the practice trials. "
+            }
+            timeline.push(initial_instructions3);
+            
+            var blur_instructions = {
+                type: 'html-keyboard-response',
+                stimulus: "<p>Match the blurriness of the letters on the bottom to the blurriness of the top letters, keeping your gaze on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider left and right to adjust the blurriness.</p><p>When you are done adjusting, press any key to go to the next trial.</p>"
+            }
+            timeline.push(blur_instructions);
             //
-            //
+            // var blur_practice = {
+            //     type: 'jspsych-blurry-word'
             // }
+
+            var probe_instructions = {
+                type: 'html-keyboard-response',
+                stimulus: "During the trials, you may see a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the spacebar immediately. <p>These practice trials will give you practice with pressing the spacebar whenever you see a flash.</p>"
+            }
+            timeline.push(probe_instructions);
             //
             // var probe_practice = {
             //     type: 'jspsych-blurry-word'
             // }
             //
-            // var blur_instructions = {
-            //
-            // }
-            //
-            // var blur_practice = {
-            //     type: 'jspsych-blurry-word'
-            // }
-            //
-            // var task_instructions = {
-            //
-            // }
+            var task_instructions = {
+                type: 'html-keyboard-response',
+                stimulus: "Now you will practice adjusting the blurriness of the bottom word to the top word and pressing the spacebar whenever you see a flash. Do all of this <b>while keeping your gaze on the fixation target</b>. Press any key to start the practice trials."
+            }
+            timeline.push(probe_instructions);
             //
             // var task_practice = {
             //     type: 'jspsych-blurry-word'
