@@ -97,10 +97,46 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
 
   plugin.trial = function(display_element, trial) {
 
-    var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px;">';
+    var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px; position: relative;">';
+
+    /* TESTING */
+
+            // if(trial.attentionProbe == "up"){
+/*
+            html += '<div id="probe-container" style = "position: absolute; left:33%; top:12%; height:60px; width: 34%; z-index:50">'
+            html += '<div id="attnProbe" style="visibility: hidden; position: absolute; left: 10px; top: 10px; z-index:51;">';
+*/
+        // } else if(trial.attentionProbe == "down"){
+
+            html += '<div id="probe-container" style = "position: absolute; left:33%; top:65%; height:60px; width: 34%; z-index:50">'
+            html += '<div id="attnProbe" style="visibility: hidden; position: absolute; '
+                // randomize percentage
+                + "left: " + 10 + "%; top: " + 10
+                + '%; z-index:51;">';
+
+        // }
+
+        // if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
+            html += '<img src = "attnProbe.png"></div>';
+        // }
+
+
+
+    // if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
+        setTimeout(function(){
+            document.querySelector('#attnProbe').style.visibility = "visible";
+            setTimeout(function(){
+                document.querySelector('#attnProbe').style.visibility = "hidden";
+            },  50); // ATTN PROBE DURATION
+        },  3000) // ATTN PROBE DELAY
+    // }
+    html += '</div>'
+    // end attention probe
+
+
     html += '<div id="jspsych-image-slider-response-target_stimulus"><img id="targetimg" src="' + trial.target_stimulus + '"></div>';
 
-    html += '<button id="jspsych-image-slider-response-next" class="blur-button jspsych-btn" style = "border: none; ">'
+    html += '<button id="jspsych-image-slider-response-next" class="blur-button jspsych-btn" style = "border: none; z-index:102">'
             + '<div style="z-index:101"><img src = "fixationcrosses/fixsmaller.png"></div></button>'
 
 
@@ -116,7 +152,15 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
           html += '</div>'
 
     }
+
     html += '</div>';
+
+
+display_element.innerHTML = html;
+    html += '</div>';
+    html += '</div>';
+
+
     html += '</div>';
     html += '</div>';
 
@@ -126,56 +170,6 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
 
     // submit button
     // html += '<button id="jspsych-image-slider-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
-
-
-    // adding attention probe
-    // RANDOMIZE POSITION.
-
-/* TESTING */
-    // if(trial.attentionProbe == "up"){
-        html += '<div id="attnProbe" style="visibility: hidden; position: absolute; z-index:100;">'
-    // } else if(trial.attentionProbe == "down"){
-    //    html += '<div id="attnProbe" style="visibility: hidden; position: absolute; z-index:100;">'
-    // }
-    if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
-        html += '<img src = "attnProbe.png"></div>';
-        html += '</div>'
-    }
-
-    display_element.innerHTML = html;
-
-    if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
-        setTimeout(function(){
-            document.querySelector('#attnProbe').style.visibility = "visible";
-            setTimeout(function(){
-                document.querySelector('#attnProbe').style.visibility = "hidden";
-            },  .3); // ATTN PROBE DURATION
-        },  10) // ATTN PROBE DELAY
-    }
-
-    /* UNCOMMENT IN FINAL
-     if(trial.attentionProbe == "up"){
-        html += '<div id="attnProbe" style="visibility: hidden; position: absolute; z-index:100;">'
-     } else if(trial.attentionProbe == "down"){
-        html += '<div id="attnProbe" style="visibility: hidden; position: absolute; z-index:100;">'
-     }
-    if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
-        html += '<img src = "attnProbe.png"></div>';
-        html += '</div>'
-    }
-
-    display_element.innerHTML = html;
-
-    if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
-        setTimeout(function(){
-            document.querySelector('#attnProbe').style.visibility = "visible";
-            setTimeout(function(){
-                document.querySelector('#attnProbe').style.visibility = "hidden";
-            }, trial.attentionProbeDuration);
-        }, trial.attentionProbeDelay)
-    }
-    */
-
 
     var response = {
       rt: null,
