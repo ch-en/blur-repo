@@ -100,8 +100,9 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
     var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px;">';
     html += '<div id="jspsych-image-slider-response-fixed_stimulus"><img id="promptimg" src="' + trial.fixed_stimulus + '"></div>';
 
-    html += '<button id="jspsych-image-slider-response-next" class="jspsych-btn" style = "border: none;">'
+    html += '<button id="jspsych-image-slider-response-next" class="blur-button jspsych-btn" style = "border: none; ">'
             + '<div style="z-index:101"><img src = "fixationcrosses/fixsmaller.png"></div></button>'
+
 
     html += '<div id="jspsych-image-slider-response-stimulus"><img id="key" src="' + trial.stimulus + '" style="blur: 5px"></div>';
     html += '<div class="jspsych-image-slider-response-container" style="position:relative;">';
