@@ -1,3 +1,7 @@
+// parameters needed:
+// add attentionProbe, attentionProbeDuration, attentionProbeDelay to the timeline (for each trial)
+
+
 jsPsych.plugins['jspsych-blurry-word'] = (function(){
 
   var plugin = {};
@@ -118,7 +122,27 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
     // add submit button
     html += '<button id="jspsych-image-slider-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
 
+    // adding attention probe
+    if(trial.attentionProbe == "up"){
+        html += '<div id="attnProbe" style="visibility: hidden; position: absolute; z-index:100;">'
+    } else if(trial.attentionProve == "down"){
+        html += '<div id="attnProbe" style="visibility: hidden; position: absolute; z-index:100;">'
+    }
+    if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
+        html += '<img src = "attnProbe.png"></div>';
+        html += '</div>'
+    }
+
     display_element.innerHTML = html;
+
+    if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
+        setTimeout(function(){
+            document.querySelector('#attnProbe').style.visibility = "visible";
+            setTimeout(function(){
+                document.querySelector('#attnProbe').style.visibility = "hidden";
+            }, trial.attentionProbeDuration);
+        }, trial.attentionProbeDelay)
+    }
 
     var response = {
       rt: null,
