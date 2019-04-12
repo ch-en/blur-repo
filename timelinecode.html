@@ -48,12 +48,12 @@
                 })
             }
             var timeline = [];
-            // // screen between trials
-            // var break_screen = {
-            //     type: 'html-keyboard-response',
-            //     stimulus:
-            // }
-            //
+
+            // screen between trials
+            var break_screen = {
+                type: 'jspsych-blurry-word'
+            }
+
             // // practice trials
             // var probe_instructions = {
             //
@@ -98,12 +98,13 @@
                 targetBlur: jsPsych.timelineVariable('targetBlur')
             }
             var all_trials = {
-                timeline: [trial],
+                timeline: [trial, break_screen],
                 timeline_variables: timeline_variables,
                 randomize_order: true,
                 repetitions: 1
             }
             timeline.push(all_trials);
+
             jsPsych.init({
               timeline: timeline,
             });
