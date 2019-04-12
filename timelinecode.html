@@ -101,11 +101,23 @@ FROM THE EEG EXPERIMENT -->
         timeline.push(trial_instructions2);
 
         // practice trials
+        var probe_instructions = {
+
+        }
+
         var probe_practice = {
 
         }
 
+        var blur_instructions = {
+
+        }
+
         var blur_practice = {
+
+        }
+
+        var task_instructions = {
 
         }
 
@@ -114,12 +126,21 @@ FROM THE EEG EXPERIMENT -->
         }
 
         var practice_block = {
+        /* here, we will ensure that the order in which participants undergo
+            practice is randomized */
+        /* result should be a list containing (1) first phase instructions
+            (2) first phase trials, repeated as desired (3) second phase
+            instructions (4) second phase trials, repeated as desired
+            (5) third phase instructions (6) third phase trials, repeated as
+            desired */
 
         }
+        timeline.push(practice_block);
 
         var trial_block = {
 
         }
+        timeline.push(trial_block);
 
         // Test stimuli: two images at a time and fixation target
         // 64 trials per participant
