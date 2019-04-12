@@ -5,60 +5,105 @@
     		<script src="jsPsych-master/jspsych.js"></script>
     		<script src="jsPsych-master/plugins/jspsych-html-keyboard-response.js"></script>
             <script src="jspsych-6.0.5/plugins/jspsych-image-keyboard-response.js"></script>
+            <script src="math.js" type="text/javascript"></script>
+            <script src="random.js" type="text/javascript"></script>
     		<link href="jsPsych-master/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     	</head>
     	<body></body>
     	<script>
-            var timeline = [];
+            // prepare trial parameters
+            var w_choices = ['been', 'book', 'cash', 'dead', 'from', 'long',
+                'look', 'luck', 'much', 'neck', 'room', 'seem', 'send', 'test',
+                'want'];
+            // randomly select four words from the bank
+            var words = [w_choices[math.floor(math.random() * words.length())],
+                w_choices[math.floor(math.random() * words.length())],
+                w_choices[math.floor(math.random() * words.length())],
+                w_choices[math.floor(math.random() * words.length())]]
+            var m_choices = [1, 2];
+            // randomly select one of the two sets of scrambled words
+            const meaningless = m_choices[math.floor(math.random() * 2)]
+            var test_m = [0, meaningless];
+            var target_m = [0, meaningless];
+            var blur = [3, 4, 6, 7];
 
-            var break = {
+            var trial_types = [];
+            for (const i of words) {
+                for (const j of test_m) {
+                    for (const k of target_m) {
+                        for (const l of blur) {
+                            trial_types.push([i, j, k, l])
+                        }
+                    }
+                }
+            }
+            console.log(trial_types)
 
+            var trial_params = [];
+            for (const i of trial_types) {
+                target = quote.concat(words[i[0]], i[2], '.png')
+                test = quote.concat(words[i[0]], i[1], '.png')
+                blur = i[3]
+                trial_params.push([target, test, blur])
             }
 
-            // practice trials
-            var probe_instructions = {
-
-            }
-
-            var probe_practice = {
-
-            }
-
-            var blur_instructions = {
-
-            }
-
-            var blur_practice = {
-
-            }
-
-            var task_instructions = {
-
-            }
-
-            var task_practice = {
-
-            }
-
-            var practice_block = {
-            // here, we will ensure that the order in which participants undergo
-            //     practice is randomized
-            // result should be a list containing (1) first phase instructions
-            //     (2) first phase trials, repeated as desired (3) second phase
-            //     instructions (4) second phase trials, repeated as desired
-            //     (5) third phase instructions (6) third phase trials, repeated as
-            //     desired
-
-            }
-            timeline.push(practice_block);
-
-            var trial_block = {
-
-            }
-            timeline.push(trial_block);
-
-            jsPsych.init({
-              timeline: timeline,
-            });
+            // var timeline = [];
+            //
+            // // screen between trials
+            // var break_screen = {
+            //     type: 'html-keyboard-response',
+            //     stimulus:
+            // }
+            //
+            // // practice trials
+            // var probe_instructions = {
+            //
+            //
+            // }
+            //
+            // var probe_practice = {
+            //     type: 'jspsych-blurry-word'
+            // }
+            //
+            // var blur_instructions = {
+            //
+            // }
+            //
+            // var blur_practice = {
+            //     type: 'jspsych-blurry-word'
+            // }
+            //
+            // var task_instructions = {
+            //
+            // }
+            //
+            // var task_practice = {
+            //     type: 'jspsych-blurry-word'
+            // }
+            //
+            // var practice_block = {
+            // // here, we will ensure that the order in which participants undergo
+            // //     practice is randomized
+            // // result should be a list containing (1) first phase instructions
+            // //     (2) first phase trials, repeated as desired (3) second phase
+            // //     instructions (4) second phase trials, repeated as desired
+            // //     (5) third phase instructions (6) third phase trials, repeated as
+            // //     desired
+            //
+            // }
+            // timeline.push(practice_block);
+            //
+            // var trial = {
+            //     type: 'jspsych-blurry-word'
+            // }
+            //
+            // var trial_block = {
+            //
+            // }
+            // timeline.push(trial_block);
+            //
+            // jsPsych.init({
+            //   timeline: timeline,
+            // });
         </script>
     </html>
