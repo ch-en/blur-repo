@@ -1,5 +1,5 @@
 // parameters needed in timeline:
-// add trial.attentionProbe, trial.attentionProbeDuration,
+// add trial.attentionProbe (up or down), trial.attentionProbeDuration,
 // trial.attentionProbeDelay, trial.targetBlur
 
 //to the timeline (for each trial)
@@ -99,37 +99,32 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
 
     var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px; position: relative;">';
 
-    /* TESTING */
-
-            // if(trial.attentionProbe == "up"){
-/*
+    // ATTENTION PROBE
+            if(trial.attentionProbe == "up"){
             html += '<div id="probe-container" style = "position: absolute; left:33%; top:12%; height:60px; width: 34%; z-index:50">'
-            html += '<div id="attnProbe" style="visibility: hidden; position: absolute; left: 10px; top: 10px; z-index:51;">';
-*/
-        // } else if(trial.attentionProbe == "down"){
-
+            html += '<div id="attnProbe" style="visibility: hidden; position: absolute; '
+                // randomize percentage
+                + "left: " + Math.random(0,10) + "%; top: " + Math.random(0,10)
+                + '%; z-index:51;">';
+         } else if(trial.attentionProbe == "down"){
             html += '<div id="probe-container" style = "position: absolute; left:33%; top:65%; height:60px; width: 34%; z-index:50">'
             html += '<div id="attnProbe" style="visibility: hidden; position: absolute; '
                 // randomize percentage
-                + "left: " + 10 + "%; top: " + 10
+                + "left: " + Math.random(0,10) + "%; top: " + Math.random(0,10)
                 + '%; z-index:51;">';
-
-        // }
-
-        // if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
+         }
+         if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
             html += '<img src = "attnProbe.png"></div>';
-        // }
+         }
 
-
-
-    // if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
+         if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
         setTimeout(function(){
             document.querySelector('#attnProbe').style.visibility = "visible";
             setTimeout(function(){
                 document.querySelector('#attnProbe').style.visibility = "hidden";
-            },  50); // ATTN PROBE DURATION
-        },  3000) // ATTN PROBE DELAY
-    // }
+                },  50); // ATTN PROBE DURATION
+            },  3000) // ATTN PROBE DELAY
+        }
     html += '</div>'
     // end attention probe
 
@@ -167,9 +162,6 @@ display_element.innerHTML = html;
     if (trial.prompt !== null){
       html += trial.prompt;
     }
-
-    // submit button
-    // html += '<button id="jspsych-image-slider-response-next" class="jspsych-btn">'+trial.button_label+'</button>';
 
     var response = {
       rt: null,
