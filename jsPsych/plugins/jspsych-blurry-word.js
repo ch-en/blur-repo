@@ -112,7 +112,8 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
             html += '<div id="probe-container" style = "position: absolute; left:33%; top:65%; height:60px; width: 34%; z-index:50">'
             html += '<div id="attnProbe" style="visibility: hidden; position: absolute; '
                 // randomize percentage
-                + "left: " + Math.random(0,10) + "%; top: " + Math.random(0,10)
+                + "left: " + (Math.random() * (10 - 0) + 0)
+                + "%; top: " + (Math.random() * (10 - 0) + 0)
                 + '%; z-index:51;">';
          }
          if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){

@@ -1,0 +1,3 @@
+// ENTER THESE INTO THE CONSOLE TO SEE DATA
+get data names: jsPsych.data.get().uniqueNames();
+get data: jsPsych.data.displayData(); //
