@@ -96,6 +96,7 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
   }
 
   plugin.trial = function(display_element, trial) {
+            console.log(trial);
 
     var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px; position: relative;">';
 
@@ -104,7 +105,8 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
             html += '<div id="probe-container" style = "position: absolute; left:33%; top:12%; height:60px; width: 34%; z-index:50">'
             html += '<div id="attnProbe" style="visibility: hidden; position: absolute; '
                 // randomize percentage
-                + "left: " + Math.random(0,10) + "%; top: " + Math.random(0,10)
+                + "left: " + (Math.random() * (10 - 0) + 0)
+                + "%; top: " + (Math.random() * (10 - 0) + 0)
                 + '%; z-index:51;">';
          } else if(trial.attentionProbe == "down"){
             html += '<div id="probe-container" style = "position: absolute; left:33%; top:65%; height:60px; width: 34%; z-index:50">'
@@ -122,8 +124,8 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
             document.querySelector('#attnProbe').style.visibility = "visible";
             setTimeout(function(){
                 document.querySelector('#attnProbe').style.visibility = "hidden";
-                },  50); // ATTN PROBE DURATION
-            },  3000) // ATTN PROBE DELAY
+            },  trial.attentionProbeDuration); // ATTN PROBE DURATION
+        },  trial.attentionProbeDelay) // ATTN PROBE DELAY
         }
     html += '</div>'
     // end attention probe
@@ -167,6 +169,11 @@ display_element.innerHTML = html;
       rt: null,
       response: null
     };
+    // store attentionResponse
+    var attentionResponse = {
+      rt: null,
+      key: null
+    };
 
     // make the parameter in the timeline so you can store it
 
@@ -191,20 +198,53 @@ display_element.innerHTML = html;
       } else {
         display_element.querySelector('#jspsych-image-slider-response-next').disabled = true;
       }
-
     });
 
-    function end_trial(){
 
+      // function to handle responses by the subject
+      var after_response = function(info) {
+        // only record the first response
+        if (attentionResponse.key == null) {
+          attentionResponse = info;
+        }
+      };
+
+              // start the response listener
+              if (trial.choices != jsPsych.NO_KEYS) {
+                var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+                  callback_function: after_response,
+                  valid_responses: trial.choices,
+                  rt_method: 'performance',
+                  persist: false,
+                  allow_held_key: false
+                });
+            };
+
+
+    // FUNCTION TO END THE TRIAL WHEN IT IS TIME
+    function end_trial(){
       jsPsych.pluginAPI.clearAllTimeouts();
+
+      // kill keyboard listeners
+      if (typeof keyboardListener !== 'undefined') {
+        jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
+      }
 
       // save data
       var trialdata = {
-        "rt": response.rt,
-        "response": response.response
+        "blur_rt": response.rt,
+        "blur_response": response.response,
+        "attention_rt": attentionResponse.rt,
+        "attention_response": attentionResponse.key
       };
 
       display_element.innerHTML = '';
+
+            // TESTING DATA COLLECTION
+            console.log(response.rt);
+            console.log(response.response);
+            console.log(attentionResponse.rt);
+            console.log(attentionResponse.key);
 
       // next trial
       jsPsych.finishTrial(trialdata);
@@ -225,6 +265,7 @@ display_element.innerHTML = html;
 
     var startTime = performance.now();
   };
+
 
   return plugin;
 

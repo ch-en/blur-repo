@@ -59,7 +59,7 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-
+    
     var new_html = '<div id="jspsych-html-keyboard-response-stimulus">'+trial.stimulus+'</div>';
 
     // add prompt
@@ -142,6 +142,8 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
         end_trial();
       }, trial.trial_duration);
     }
+
+
 
   };
 

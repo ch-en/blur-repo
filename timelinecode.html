@@ -35,16 +35,24 @@
                     }
                 }
             }
-            console.log(trial_types)
+            var attentionProbeList = ["up", "down", "none"];
+
+            // console.log(trial_types)
             var timeline_variables = [];
             for (const i of trial_types) {
                 s = 'stimuli/'
                 target = s.concat(i[0], i[2], '.png')
                 test = s.concat(i[0], i[1], '.png')
                 blur = i[3]
+                attentionProbe = attentionProbeList[Math.floor(Math.random()*attentionProbeList.length)]
+                // console.log(attentionProbe)
+                attentionProbeDelay = (Math.random() * (6000 - 3000) + 3000)
                 timeline_variables.push({
                     target_stimulus: target, test_stimulus: test,
-                    targetBlur : blur
+                    targetBlur : blur,
+                    attentionProbe : attentionProbe,
+                    attentionProbeDelay : attentionProbeDelay,
+                    attentionProbeDuration : 50
                 })
             }
             var timeline = [];
@@ -72,7 +80,7 @@
                 stimulus: "The first few trials will give you some practice with the task. You will first practice adjusting the blurriness and detecting the flash separately. Then you will practice them in the same trial. You may start by clicking the mouse to start the practice trials. "
             }
             timeline.push(initial_instructions3);
-            
+
             var blur_instructions = {
                 type: 'html-keyboard-response',
                 stimulus: "<p>Match the blurriness of the letters on the bottom to the blurriness of the top letters, keeping your gaze on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider left and right to adjust the blurriness.</p><p>When you are done adjusting, press any key to go to the next trial.</p>"
@@ -118,14 +126,19 @@
                 type: 'jspsych-blurry-word',
                 target_stimulus: jsPsych.timelineVariable('target_stimulus'),
                 test_stimulus: jsPsych.timelineVariable('test_stimulus'),
-                targetBlur: jsPsych.timelineVariable('targetBlur')
+                targetBlur: jsPsych.timelineVariable('targetBlur'),
+                attentionProbe: jsPsych.timelineVariable('attentionProbe'),
+                attentionProbeDuration: jsPsych.timelineVariable('attentionProbeDuration'),
+                attentionProbeDelay: jsPsych.timelineVariable('attentionProbeDelay')
             }
+
             var all_trials = {
                 timeline: [trial, break_screen],
                 timeline_variables: timeline_variables,
                 randomize_order: true,
                 repetitions: 1
             }
+
             timeline.push(all_trials);
 
             // SAVE DATA TO DATABASE
