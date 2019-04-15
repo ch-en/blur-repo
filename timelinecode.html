@@ -59,7 +59,11 @@
 
             // screen between trials
             var break_screen = {
-                type: 'jspsych-blurry-word'
+                // type: 'jspsych-blurry-word' 
+                type: 'html-keyboard-response',
+                stimulus: '<p style="font-size: 48px;">+</p>',
+                choices: jsPsych.NO_KEYS,
+                trial_duration: 1000, // from jsPsych site
             }
 
             // practice trials
@@ -83,13 +87,13 @@
 
             var blur_instructions = {
                 type: 'html-keyboard-response',
-                stimulus: "<p>Match the blurriness of the letters on the bottom to the blurriness of the top letters, keeping your gaze on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider left and right to adjust the blurriness.</p><p>When you are done adjusting, press any key to go to the next trial.</p>"
+                stimulus: "<p>Match the blurriness of the letters on the bottom to the blurriness of the top letters, keeping your gaze on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider left and right to adjust the blurriness.</p><p>When you are done adjusting, press the fixation cross to go to the next trial.</p>"
             }
             timeline.push(blur_instructions);
-            //
-            // var blur_practice = {
-            //     type: 'jspsych-blurry-word'
-            // }
+            
+            var blur_practice = {
+                type: 'jspsych-blurry-word'
+            }
 
             var probe_instructions = {
                 type: 'html-keyboard-response',
@@ -111,6 +115,7 @@
             //     type: 'jspsych-blurry-word'
             // }
             //
+            // 4 task practice trials
             // var practice_block = {
             // // here, we will ensure that the order in which participants undergo
             // //     practice is randomized
@@ -133,7 +138,7 @@
             }
 
             var all_trials = {
-                timeline: [trial, break_screen],
+                timeline: [trial],//, break_screen],
                 timeline_variables: timeline_variables,
                 randomize_order: true,
                 repetitions: 1
