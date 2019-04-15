@@ -89,19 +89,19 @@
             // add basic instructions to master timeline
             var initial_instructions1 = {
                 type: 'html-keyboard-response',
-                stimulus: "Thank you for participating. In this task, you will be shown two sets of letters of varying levels of blurriness. <p>In each trial, you will see a fixation target in the center of the screen. Your goal is to look at the fixation target and, <i>without shifting your gaze</i>, adjust the blurriness of the letters on the bottom to match the blurriness of the top letters as best as you can. </p> <p>Press any key to continue through the instructions.</p>"
+                stimulus: "Thank you for helping us with our research! <p>In this task, you will be shown two sets of letters of varying levels of blurriness. Your goal is to adjust the blurriness of the letters on the bottom to match the blurriness of the top letters while looking at a fixation target in the center. </p> <p>Press any key to continue through the instructions.</p>"
             }
             timeline.push(initial_instructions1);
 
             var initial_instructions2 = {
                 type: 'html-keyboard-response',
-                stimulus: "<p>Your gaze should be on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider to adjust the blurriness of the letters. Moving the slider to the right will make the letters blurrier. Moving the slider to the left will make the letters sharper.<p> When you are done adjusting, click the fixation target to go on to the next trial. </p><p>During the trials, you may see a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the <strong>spacebar</strong> immediately. </p>"
+                stimulus: "<p>During the adjustment process, you may notice a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the <strong>spacebar</strong> immediately. </p>"
             }
             timeline.push(initial_instructions2);
 
             var initial_instructions3 = {
                 type: 'html-keyboard-response',
-                stimulus: "The first few trials will give you some practice with the task. You will first practice adjusting the blurriness and detecting the flash separately. Then you will practice them in the same trial. You may start by clicking the mouse to start the practice trials. "
+                stimulus: "The first few trials will give you some practice with the task. You will first practice adjusting the blurriness and detecting the flash separately. Then you will practice them in the same trial. Start by clicking the mouse to start the practice trials. "
             }
             timeline.push(initial_instructions3);
 
@@ -109,19 +109,19 @@
             //  for each phase
             var blur_instructions = {
                 type: 'html-keyboard-response',
-                stimulus: "<p>Match the blurriness of the letters on the bottom to the blurriness of the top letters, keeping your gaze on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider left and right to adjust the blurriness.</p><p>When you are done adjusting, click the fixation target to go to the next trial.</p>"
+                stimulus: "<strong>Practice Trials: Blur Adjustment</strong><p>Match the blurriness of the letters on the bottom to the blurriness of the top letters, <b>keeping your gaze on the fixation target as you adjust the blurriness levels</b>. Use the mouse to move the slider left and right to adjust the blurriness. Moving the slider to the left make the letters sharper. Moving the slider to the right makes the letters blurrier.</p><p>When you are done adjusting, click the fixation target to go to the next trial.</p>"
             }
             blurPracticeTimeline.push(blur_instructions);
 
             var probe_instructions = {
                 type: 'html-keyboard-response',
-                stimulus: "During the trials, you may see a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the spacebar immediately. <p>These practice trials will give you practice with pressing the spacebar whenever you see a flash.</p>"
+                stimulus: "<strong> Practice Trials: Flash Detection</strong><p>During the trials, you may notice a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the spacebar immediately. The following trials will give you practice with pressing the spacebar when you see a flash.</p>"
             }
             probePracticeTimeline.push(probe_instructions);
 
             var task_instructions = {
                 type: 'html-keyboard-response',
-                stimulus: "Now you will practice adjusting the blurriness of the bottom word to the top word and pressing the spacebar whenever you see a flash. Do all of this <b>while keeping your gaze on the fixation target</b>. Press any key to start the practice trials."
+                stimulus: "Now you will practice blurriness adjustment and flash detection together. Remember to <b>keep your gaze on the fixation target at all times</b>. Press any key to start the practice trials."
             }
             bothPracticeTimeline.push(task_instructions);
 
@@ -209,11 +209,16 @@
 
             // SAVE DATA TO DATABASE
 
-            var debrief = {
+            var debrief1 = {
                 type: 'html-keyboard-response',
-                stimulus: "Congratulations! You have completed all of the trials. Thank you for helping us with our research. <p>In this experiment, we investigate a purposed effect of knowledge on perception by Gary Lupyan. In Lupyan’s experiment, participants made meaningless––but not meaningful––letters sharper when adjusting them in relation to meaningful letters, a result which suggests that meaningful letters look sharper than meaningless ones. We propose that such an effect might be influenced by the way participants allocate physically directed and mentally directed attention. In this experiment, we ask you to perform the same task with your gaze fixed, so that your physically directed attention is equally allocated between the meaningful and meaningless letters. We use flashes to detect your mental attention to see if it is unequally allocated to the meaningful and meaningless letters. We hypothesize that a difference in your mental attention might cause you to make meaningless letters sharper when adjusting them to meaningful strings. </p>"
+                stimulus: "Congratulations! You have completed all of the trials. <p>In this experiment, we investigate a purposed effect of knowledge on perception by Gary Lupyan. In Lupyan’s experiment, participants made meaningless––but not meaningful––letters sharper when adjusting them in relation to meaningful letters, a result which suggests that meaningful letters look sharper than meaningless ones. We propose that such an effect might be influenced by the way participants allocate physically directed and mentally directed attention. </p>"
             }
-            timeline.push(debrief);
+            timeline.push(debrief1);
+            var debrief2 = {
+                type: 'html-keyboard-response',
+                stimulus: "<p>In this experiment, we ask you to perform the same task with your gaze fixed, so that your physically directed attention is equally allocated between the meaningful and meaningless letters. We use flashes to detect your mental attention to see if it is unequally allocated to the meaningful and meaningless letters. We hypothesize that a difference in your mental attention might cause you to make meaningless letters sharper when adjusting them to meaningful strings.</p>"
+            }
+            timeline.push(debrief2);
 
             jsPsych.init({
               timeline: timeline,
