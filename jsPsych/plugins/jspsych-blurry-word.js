@@ -191,6 +191,8 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
 
         // PASS IN THE TARGETBLUR PARAMETER FROM TIMELINE
         document.querySelector("#targetimg").style.filter = "blur(" + trial.targetBlur + "px)";
+        document.querySelector("#key").style.filter = "blur(" + 5 + "px)";
+
         display_element.querySelector('#jspsych-image-slider-response-response').addEventListener('mousemove', function() {
             response.response = display_element.querySelector('#jspsych-image-slider-response-response').value;
 
