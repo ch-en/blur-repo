@@ -37,6 +37,7 @@
             }
             var attentionProbeList = ["up", "down", "none"];
 
+            // console.log(trial_types)
             var timeline_variables = [];
             for (const i of trial_types) {
                 s = 'stimuli/'
@@ -54,39 +55,18 @@
                     attentionProbeDuration : 50
                 })
             }
+            var timeline = [];
 
-            var prac_timeline_variables = []
-            while (prac_timeline_variables.length < 10) {
-                // randomly select a trial from all possible trials
-                trial = timeline_variables[Math.floor(Math.random() * timeline_variables.length)];
-                // check whether the selected trial is already part of the practice trials timeline
-                unique = 1;
-                for (const i of prac_timeline_variables) {
-                    if (trial == i) {
-                        unique == 0;
-                    }
-                }
-                // only add the selected trial to the practice timeline if it is new
-                if (unique = 1) {
-                    prac_timeline_variables.push(trial)
-                }
-            }
-
-            // ensure that the sets of words used for practice and test are disjoint
-            // for (const i of prac_timeline_variables) {
-            //
+            // screen between trials
+            // var break_screen = {
+            //     // type: 'jspsych-blurry-word'
+            //     type: 'html-keyboard-response',
+            //     stimulus: '<p style="font-size: 48px;">+</p>',
+            //     choices: jsPsych.NO_KEYS,
+            //     trial_duration: 1000, // from jsPsych site
             // }
 
-
-            // define all timelines
-            var timeline = []; // master timeline
-            var blurPracticeTimeline = [];
-            var probePracticeTimeline = [];
-            var bothPracticeTimeline = [];
-            // the preceding timelines will be added to this one, which will be added to the master timeline
-            var practiceTimeline = [];
-
-            // add basic instructions to master timeline
+            // practice trials
             var initial_instructions1 = {
                 type: 'html-keyboard-response',
                 stimulus: "Thank you for participating. In this task, you will be shown two sets of letters of varying levels of blurriness. <p>In each trial, you will see a fixation target in the center of the screen. Your goal is to look at the fixation target and, <i>without shifting your gaze</i>, adjust the blurriness of the letters on the bottom to match the blurriness of the top letters as best as you can. </p> <p>Press any key to continue through the instructions.</p>"
@@ -105,27 +85,31 @@
             }
             timeline.push(initial_instructions3);
 
-            // add instructions for each of the three practice phases to the timeline
-            //  for each phase
             var blur_instructions = {
                 type: 'html-keyboard-response',
                 stimulus: "<p>Match the blurriness of the letters on the bottom to the blurriness of the top letters, keeping your gaze on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider left and right to adjust the blurriness.</p><p>When you are done adjusting, click the fixation target to go to the next trial.</p>"
             }
-            blurPracticeTimeline.push(blur_instructions);
+            timeline.push(blur_instructions);
+
 
             var probe_instructions = {
                 type: 'html-keyboard-response',
                 stimulus: "During the trials, you may see a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the spacebar immediately. <p>These practice trials will give you practice with pressing the spacebar whenever you see a flash.</p>"
             }
-            probePracticeTimeline.push(probe_instructions);
+            timeline.push(probe_instructions);
+            //
+            // probe practice
+            // var probe_practice = {
+            //     type: 'jspsych-blurry-word'
+            // }
+            // probe practice end
 
             var task_instructions = {
                 type: 'html-keyboard-response',
                 stimulus: "Now you will practice adjusting the blurriness of the bottom word to the top word and pressing the spacebar whenever you see a flash. Do all of this <b>while keeping your gaze on the fixation target</b>. Press any key to start the practice trials."
             }
-            bothPracticeTimeline.push(task_instructions);
+            timeline.push(task_instructions);
 
-            // define a trial
             var trial = {
                 type: 'jspsych-blurry-word',
                 target_stimulus: jsPsych.timelineVariable('target_stimulus'),
@@ -133,72 +117,17 @@
                 targetBlur: jsPsych.timelineVariable('targetBlur'),
                 attentionProbe: jsPsych.timelineVariable('attentionProbe'),
                 attentionProbeDuration: jsPsych.timelineVariable('attentionProbeDuration'),
-                attentionProbeDelay: jsPsych.timelineVariable('attentionProbeDelay')
-            }
-
-            // define probe trial (in which probe detection concludes the trial)
-            var probe_trial = {
-                type: 'jspsych-blurry-word',
-                target_stimulus: jsPsych.timelineVariable('target_stimulus'),
-                test_stimulus: jsPsych.timelineVariable('test_stimulus'),
-                targetBlur: jsPsych.timelineVariable('targetBlur'),
-                attentionProbe: jsPsych.timelineVariable('attentionProbe'),
-                attentionProbeDuration: jsPsych.timelineVariable('attentionProbeDuration'),
                 attentionProbeDelay: jsPsych.timelineVariable('attentionProbeDelay'),
-                attention_response_ends_trial: true
+                attention_response_ends_trial: false // make 'true' if attn practice
             }
 
-            // add 3 blur practice trials to blur practice timeline
-            var blur_practice = {
-                timeline: [trial],
-                timeline_variables: prac_timeline_variables.slice(0,3),
-                randomize_order: true,
-                repetitions: 1
-            }
-            blurPracticeTimeline.push(blur_practice);
-
-            // add 3 probe practice trials to probe practice timeline
-            var probe_practice = {
-                timeline: [probe_trial],
-                timeline_variables: prac_timeline_variables.slice(3,6),
-                randomize_order: true,
-                repetitions: 1
-            }
-            probePracticeTimeline.push(probe_practice);
-
-            // add 4 complete practice trials to both practice timeline
-            var both_practice = {
-                timeline: [trial],
-                timeline_variables: prac_timeline_variables.slice(6),
-                randomize_order: true,
-                repetitions: 1
-            }
-            bothPracticeTimeline.push(both_practice);
-
-            // add the three phases to the practice timeline
-            order = Math.random();
-            if (order < 0.5) {
-                practiceTimeline = practiceTimeline.concat(blurPracticeTimeline);
-                practiceTimeline = practiceTimeline.concat(probePracticeTimeline);
-            }
-            else {
-                practiceTimeline = practiceTimeline.concat(probePracticeTimeline);
-                practiceTimeline = practiceTimeline.concat(blurPracticeTimeline);
-            }
-            practiceTimeline = practiceTimeline.concat(bothPracticeTimeline);
-
-            // add the practice timeline to the master timeline
-            timeline = timeline.concat(practiceTimeline);
-
-            console.log(timeline);
-
-            // add all trials to the master timeline
             var all_trials = {
-                timeline: [trial],
+                timeline: [trial],//, break_screen],
                 timeline_variables: timeline_variables,
                 randomize_order: true,
                 repetitions: 1
             }
+
             timeline.push(all_trials);
 
             // SAVE DATA TO DATABASE
