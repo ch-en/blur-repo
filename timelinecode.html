@@ -58,13 +58,13 @@
             var timeline = [];
 
             // screen between trials
-            var break_screen = {
-                // type: 'jspsych-blurry-word' 
-                type: 'html-keyboard-response',
-                stimulus: '<p style="font-size: 48px;">+</p>',
-                choices: jsPsych.NO_KEYS,
-                trial_duration: 1000, // from jsPsych site
-            }
+            // var break_screen = {
+            //     // type: 'jspsych-blurry-word' 
+            //     type: 'html-keyboard-response',
+            //     stimulus: '<p style="font-size: 48px;">+</p>',
+            //     choices: jsPsych.NO_KEYS,
+            //     trial_duration: 1000, // from jsPsych site
+            // }
 
             // practice trials
             var initial_instructions1 = {
@@ -75,7 +75,7 @@
 
             var initial_instructions2 = {
                 type: 'html-keyboard-response',
-                stimulus: "<p>Your gaze should be on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider to adjust the blurriness of the letters. Moving the slider to the right will make the letters blurrier. Moving the slider to the left will make the letters sharper.<p> When you are done adjusting, press any key to go to the next trial. </p><p>During the trials, you may see a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the <strong>spacebar</strong> immediately. </p>"
+                stimulus: "<p>Your gaze should be on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider to adjust the blurriness of the letters. Moving the slider to the right will make the letters blurrier. Moving the slider to the left will make the letters sharper.<p> When you are done adjusting, click the fication target to go on to the next trial. </p><p>During the trials, you may see a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the <strong>spacebar</strong> immediately. </p>"
             }
             timeline.push(initial_instructions2);
 
@@ -87,13 +87,40 @@
 
             var blur_instructions = {
                 type: 'html-keyboard-response',
-                stimulus: "<p>Match the blurriness of the letters on the bottom to the blurriness of the top letters, keeping your gaze on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider left and right to adjust the blurriness.</p><p>When you are done adjusting, press the fixation cross to go to the next trial.</p>"
+                stimulus: "<p>Match the blurriness of the letters on the bottom to the blurriness of the top letters, keeping your gaze on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider left and right to adjust the blurriness.</p><p>When you are done adjusting, click the fixation target to go to the next trial.</p>"
             }
             timeline.push(blur_instructions);
             
+            // blur practice - ??? NOT FINISHED
+            var practice_words = [w_choices[Math.floor(Math.random() * w_choices.length)],
+                w_choices[Math.floor(Math.random() * w_choices.length)],
+                w_choices[Math.floor(Math.random() * w_choices.length)]]
+            
+            var practice_timeline = []
+            for (const i of practice_words) {
+                // if i is even, meaningful, if odd, meaningless?
+                s = 'stimuli/'
+                target = s.concat(i, , '.png')
+                test = s.concat(i, , '.png')
+                blur = 
+                // attentionProbe = attentionProbeList[Math.floor(Math.random()*attentionProbeList.length)]
+                // // console.log(attentionProbe)
+                // attentionProbeDelay = (Math.random() * (6000 - 3000) + 3000)
+                practice_timeline.push({
+                    target_stimulus: target, test_stimulus: test,
+                    targetBlur : blur//,
+                    // attentionProbe : attentionProbe,
+                    // attentionProbeDelay : attentionProbeDelay,
+                    // attentionProbeDuration : 50
+                }) 
+            }
             var blur_practice = {
                 type: 'jspsych-blurry-word'
+                target_stimulus: jsPsych.timelineVariable('target_stimulus'),
+                test_stimulus: jsPsych.timelineVariable('test_stimulus'),
+                targetBlur: jsPsych.timelineVariable('targetBlur'),
             }
+            // blur practice end
 
             var probe_instructions = {
                 type: 'html-keyboard-response',
@@ -101,10 +128,12 @@
             }
             timeline.push(probe_instructions);
             //
+            // probe practice
             // var probe_practice = {
             //     type: 'jspsych-blurry-word'
             // }
-            //
+            // probe practice end
+
             var task_instructions = {
                 type: 'html-keyboard-response',
                 stimulus: "Now you will practice adjusting the blurriness of the bottom word to the top word and pressing the spacebar whenever you see a flash. Do all of this <b>while keeping your gaze on the fixation target</b>. Press any key to start the practice trials."
