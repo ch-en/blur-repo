@@ -95,7 +95,7 @@
 
             var initial_instructions2 = {
                 type: 'html-keyboard-response',
-                stimulus: "<p>Your gaze should be on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider to adjust the blurriness of the letters. Moving the slider to the right will make the letters blurrier. Moving the slider to the left will make the letters sharper.<p> When you are done adjusting, click the fication target to go on to the next trial. </p><p>During the trials, you may see a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the <strong>spacebar</strong> immediately. </p>"
+                stimulus: "<p>Your gaze should be on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider to adjust the blurriness of the letters. Moving the slider to the right will make the letters blurrier. Moving the slider to the left will make the letters sharper.<p> When you are done adjusting, click the fixation target to go on to the next trial. </p><p>During the trials, you may see a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the <strong>spacebar</strong> immediately. </p>"
             }
             timeline.push(initial_instructions2);
 
@@ -191,6 +191,12 @@
             timeline = timeline.concat(practiceTimeline);
 
             console.log(timeline);
+
+            var start_instructions = {
+                type: 'html-keyboard-response',
+                stimulus: "You have completed the practice trials. Now you will start the actual experiment. <p>Remember: adjust the blurriness of the bottom word to the top word using your mouse and the slider.</p> <p>Press the spacebar whenever you see a flash.</p> Do all of this <b>while keeping your gaze on the fixation target</b>. <p>Press any key to start the experiment.</p>"
+            }
+            timeline.push(start_instructions);
 
             // add all trials to the master timeline
             var all_trials = {
