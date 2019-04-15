@@ -98,22 +98,27 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
   plugin.trial = function(display_element, trial) {
             console.log(trial);
 
-    var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 100px 0px; position: relative;">';
+    var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 0px 0px; position: relative;">';
+
+    var attn_left_offset = (Math.random() * (100 - 0) + 0);
+    var attn_top_offset = (Math.random() * (100 - 0) + 0);
+    console.log(attn_top_offset);
+    console.log(attn_left_offset);
 
     // ATTENTION PROBE
             if(trial.attentionProbe == "up"){
             html += '<div id="probe-container" style = "position: absolute; left:33%; top:12%; height:60px; width: 34%; z-index:50">'
             html += '<div id="attnProbe" style="visibility: hidden; position: absolute; '
                 // randomize percentage
-                + "left: " + (Math.random() * (10 - 0) + 0)
-                + "%; top: " + (Math.random() * (10 - 0) + 0)
+                + "left: " + attn_left_offset
+                + "%; top: " + attn_top_offset
                 + '%; z-index:51;">';
          } else if(trial.attentionProbe == "down"){
             html += '<div id="probe-container" style = "position: absolute; left:33%; top:65%; height:60px; width: 34%; z-index:50">'
             html += '<div id="attnProbe" style="visibility: hidden; position: absolute; '
                 // randomize percentage
-                + "left: " + (Math.random() * (10 - 0) + 0)
-                + "%; top: " + (Math.random() * (10 - 0) + 0)
+                + "left: " + attn_left_offset
+                + "%; top: " + attn_top_offset
                 + '%; z-index:51;">';
          }
          if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){

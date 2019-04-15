@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+    <html>
+    	<head>
+    		<title>My experiment</title>
+    		<script src="jsPsych/jspsych.js"></script>
+    		<script src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
+            <script src="jsPsych/plugins/jspsych-image-keyboard-response.js"></script>
+            <script src="jsPsych/plugins/jspsych-blurry-word.js"></script>
+    		<link href="jsPsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    	</head>
+    	<body></body>
+    	<script>
+            // prepare trial parameters
+            var w_choices = ['been', 'book', 'cash', 'dead', 'from', 'long',
+                'look', 'luck', 'much', 'neck', 'room', 'seem', 'send', 'test',
+                'want'];
+            // randomly select four words from the bank
+            var words = [w_choices[Math.floor(Math.random() * w_choices.length)],
+                w_choices[Math.floor(Math.random() * w_choices.length)],
+                w_choices[Math.floor(Math.random() * w_choices.length)],
+                w_choices[Math.floor(Math.random() * w_choices.length)]]
+            var m_choices = [1, 2];
+            // randomly select one of the two sets of scrambled words
+            const meaningless = m_choices[Math.floor(Math.random() * 2)]
+            var test_m = [0, meaningless];
+            var target_m = [0, meaningless];
+            var blur = [3, 4, 6, 7];
+            var trial_types = [];
+            for (const i of words) {
+                for (const j of test_m) {
+                    for (const k of target_m) {
+                        for (const l of blur) {
+                            trial_types.push([i, j, k, l])
+                        }
+                    }
+                }
+            }
+            var attentionProbeList = ["up", "down", "none"];
+
+            // console.log(trial_types)
+            var timeline_variables = [];
+            for (const i of trial_types) {
+                s = 'stimuli/'
+                target = s.concat(i[0], i[2], '.png')
+                test = s.concat(i[0], i[1], '.png')
+                blur = i[3]
+                attentionProbe = attentionProbeList[Math.floor(Math.random()*attentionProbeList.length)]
+                // console.log(attentionProbe)
+                attentionProbeDelay = (Math.random() * (6000 - 3000) + 3000)
+                timeline_variables.push({
+                    target_stimulus: target, test_stimulus: test,
+                    targetBlur : blur,
+                    attentionProbe : attentionProbe,
+                    attentionProbeDelay : attentionProbeDelay,
+                    attentionProbeDuration : 50
+                })
+            }
+            var timeline = [];
+
+            // screen between trials
+            // var break_screen = {
+            //     // type: 'jspsych-blurry-word'
+            //     type: 'html-keyboard-response',
+            //     stimulus: '<p style="font-size: 48px;">+</p>',
+            //     choices: jsPsych.NO_KEYS,
+            //     trial_duration: 1000, // from jsPsych site
+            // }
+
+            // practice trials
+            var initial_instructions1 = {
+                type: 'html-keyboard-response',
+                stimulus: "Thank you for participating. In this task, you will be shown two sets of letters of varying levels of blurriness. <p>In each trial, you will see a fixation target in the center of the screen. Your goal is to look at the fixation target and, <i>without shifting your gaze</i>, adjust the blurriness of the letters on the bottom to match the blurriness of the top letters as best as you can. </p> <p>Press any key to continue through the instructions.</p>"
+            }
+            timeline.push(initial_instructions1);
+
+            var initial_instructions2 = {
+                type: 'html-keyboard-response',
+                stimulus: "<p>Your gaze should be on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider to adjust the blurriness of the letters. Moving the slider to the right will make the letters blurrier. Moving the slider to the left will make the letters sharper.<p> When you are done adjusting, click the fication target to go on to the next trial. </p><p>During the trials, you may see a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the <strong>spacebar</strong> immediately. </p>"
+            }
+            timeline.push(initial_instructions2);
+
+            var initial_instructions3 = {
+                type: 'html-keyboard-response',
+                stimulus: "The first few trials will give you some practice with the task. You will first practice adjusting the blurriness and detecting the flash separately. Then you will practice them in the same trial. You may start by clicking the mouse to start the practice trials. "
+            }
+            timeline.push(initial_instructions3);
+
+            var blur_instructions = {
+                type: 'html-keyboard-response',
+                stimulus: "<p>Match the blurriness of the letters on the bottom to the blurriness of the top letters, keeping your gaze on the fixation target as you adjust the blurriness levels. Use the mouse to move the slider left and right to adjust the blurriness.</p><p>When you are done adjusting, click the fixation target to go to the next trial.</p>"
+            }
+            timeline.push(blur_instructions);
+
+
+            var probe_instructions = {
+                type: 'html-keyboard-response',
+                stimulus: "During the trials, you may see a brief flash of a small and light-colored shape in the letters. Whenever you notice a flash, press the spacebar immediately. <p>These practice trials will give you practice with pressing the spacebar whenever you see a flash.</p>"
+            }
+            timeline.push(probe_instructions);
+            //
+            // probe practice
+            // var probe_practice = {
+            //     type: 'jspsych-blurry-word'
+            // }
+            // probe practice end
+
+            var task_instructions = {
+                type: 'html-keyboard-response',
+                stimulus: "Now you will practice adjusting the blurriness of the bottom word to the top word and pressing the spacebar whenever you see a flash. Do all of this <b>while keeping your gaze on the fixation target</b>. Press any key to start the practice trials."
+            }
+            timeline.push(task_instructions);
+
+            var trial = {
+                type: 'jspsych-blurry-word',
+                target_stimulus: jsPsych.timelineVariable('target_stimulus'),
+                test_stimulus: jsPsych.timelineVariable('test_stimulus'),
+                targetBlur: jsPsych.timelineVariable('targetBlur'),
+                attentionProbe: jsPsych.timelineVariable('attentionProbe'),
+                attentionProbeDuration: jsPsych.timelineVariable('attentionProbeDuration'),
+                attentionProbeDelay: jsPsych.timelineVariable('attentionProbeDelay')
+            }
+
+            var all_trials = {
+                timeline: [trial],//, break_screen],
+                timeline_variables: timeline_variables,
+                randomize_order: true,
+                repetitions: 1
+            }
+
+            timeline.push(all_trials);
+
+            // SAVE DATA TO DATABASE
+
+            var debrief = {
+                type: 'html-keyboard-response',
+                stimulus: "Congratulations! You have completed all of the trials. Thank you for helping us with our research. <p>In this experiment, we investigate a purposed effect of knowledge on perception by Gary Lupyan. In Lupyan’s experiment, participants made meaningless––but not meaningful––letters sharper when adjusting them in relation to meaningful letters, a result which suggests that meaningful letters look sharper than meaningless ones. We propose that such an effect might be influenced by the way participants allocate physically directed and mentally directed attention. In this experiment, we ask you to perform the same task with your gaze fixed, so that your physically directed attention is equally allocated between the meaningful and meaningless letters. We use flashes to detect your mental attention to see if it is unequally allocated to the meaningful and meaningless letters. We hypothesize that a difference in your mental attention might cause you to make meaningless letters sharper when adjusting them to meaningful strings. </p>"
+            }
+            timeline.push(debrief);
+
+            jsPsych.init({
+              timeline: timeline,
+            });
+        </script>
+    </html>
