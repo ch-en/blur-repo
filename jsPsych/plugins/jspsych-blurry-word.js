@@ -11,7 +11,7 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
 
     jsPsych.pluginAPI.registerPreload('image-slider-response', 'stimulus', 'image');
 
-    
+
     plugin.info = {
         name: 'jspsych-blurry-word',
         description: '',
@@ -92,6 +92,12 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
                 default: true,
                 description: 'If true, trial will end when user makes a response.'
             },
+            attention_response_ends_trial: {
+                type: jsPsych.plugins.parameterType.BOOL,
+                pretty_name: 'Attention response ends trial',
+                default: false,
+                description: 'If true, trial will end when user makes an attention response.'
+            }
         }
     }
 
@@ -126,9 +132,9 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
         }
 
         if(trial.attentionProbe == "up" || trial.attentionProbe == "down"){
-            setTimeout(function(){
+            jsPsych.pluginAPI.setTimeout(function(){
                 document.querySelector('#attnProbe').style.visibility = "visible";
-                setTimeout(function(){
+                jsPsych.pluginAPI.setTimeout(function(){
                     document.querySelector('#attnProbe').style.visibility = "hidden";
                 },  trial.attentionProbeDuration); // ATTN PROBE DURATION
             },  trial.attentionProbeDelay) // ATTN PROBE DELAY
@@ -214,7 +220,7 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
                 attentionResponse = info;
             }
 
-            if (trial.response_ends_trial) {
+            if (trial.attention_response_ends_trial) {
                 end_trial();
             }
         };
