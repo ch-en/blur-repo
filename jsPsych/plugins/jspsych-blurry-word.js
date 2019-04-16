@@ -262,10 +262,17 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
 
             // save data
             var trialdata = {
+                "target_stimulus": trial.target_stimulus,
+                "test_stimulus": trial.test_stimulus,
+                "target_blur": trial.targetBlur,
                 "blur_rt": response.rt,
                 "blur_response": response.response,
+                "attention_probe": trial.attentionProbe,
+                "attention_delay": trial.attentionProbeDelay,
+                "attention_duration" : trial.attentionProbeDuration
                 "attention_rt": attentionResponse.rt,
-                "attention_response": attentionResponse.key
+                "attention_response": attentionResponse.key,
+
             };
 
             display_element.innerHTML = '';

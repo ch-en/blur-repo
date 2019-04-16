@@ -6,6 +6,8 @@
     		<script src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
             <script src="jsPsych/plugins/jspsych-image-keyboard-response.js"></script>
             <script src="jsPsych/plugins/jspsych-blurry-word.js"></script>
+            <script src="jsPsych/plugins/jspsych-call-function.js"></script>
+            <script src="js/serverComm.js"></script>
     		<link href="jsPsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     	</head>
     	<body></body>
@@ -42,6 +44,7 @@
                 }
             }
             var attentionProbeList = ["up", "down", "none"];
+            var practiceAttentionProbeList = ["up", "down"];
             var timeline_variables = [];
             for (const i of trial_types) {
                 s = 'stimuli/'
@@ -183,7 +186,7 @@
                 target_stimulus: jsPsych.timelineVariable('target_stimulus'),
                 test_stimulus: jsPsych.timelineVariable('test_stimulus'),
                 targetBlur: jsPsych.timelineVariable('targetBlur'),
-                attentionProbe: jsPsych.timelineVariable('attentionProbe'),
+                attentionProbe: jsPsych.timelineVariable('practiceAttentionProbe'),
                 attentionProbeDuration: jsPsych.timelineVariable('attentionProbeDuration'),
                 attentionProbeDelay: jsPsych.timelineVariable('attentionProbeDelay'),
                 attention_response_ends_trial: true
@@ -247,6 +250,13 @@
             timeline.push(all_trials);
 
             // SAVE DATA TO DATABASE
+            var saveData = {
+                type: 'call-function',
+                func: function(){
+                  serverComm.save_data(jsPsych.data.get().values());
+                }
+            }
+            timeline.push(saveData);
 
             var debrief1 = {
                 type: 'html-keyboard-response',
