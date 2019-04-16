@@ -269,7 +269,7 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
                 "blur_response": response.response,
                 "attention_probe": trial.attentionProbe,
                 "attention_delay": trial.attentionProbeDelay,
-                "attention_duration" : trial.attentionProbeDuration
+                "attention_duration" : trial.attentionProbeDuration,
                 "attention_rt": attentionResponse.rt,
                 "attention_response": attentionResponse.key,
 
