@@ -15,10 +15,15 @@
                 'look', 'luck', 'much', 'neck', 'room', 'seem', 'send', 'test',
                 'want'];
             // randomly select four words from the bank
-            var words = [w_choices[Math.floor(Math.random() * w_choices.length)],
-                w_choices[Math.floor(Math.random() * w_choices.length)],
-                w_choices[Math.floor(Math.random() * w_choices.length)],
-                w_choices[Math.floor(Math.random() * w_choices.length)]]
+            var word_1 = w_choices[Math.floor(Math.random() * w_choices.length)];
+            w_choices.splice(w_choices.indexOf(word_1),1);
+            var word_2 = w_choices[Math.floor(Math.random() * w_choices.length)];
+            w_choices.splice(w_choices.indexOf(word_2),1);
+            var word_3 = w_choices[Math.floor(Math.random() * w_choices.length)];
+            w_choices.splice(w_choices.indexOf(word_3),1);
+            var word_4 = w_choices[Math.floor(Math.random() * w_choices.length)];
+            w_choices.splice(w_choices.indexOf(word_4),1);
+            var words = [word_1, word_2, word_3, word_4];
             var m_choices = [1, 2];
             // randomly select one of the two sets of scrambled words
             const meaningless = m_choices[Math.floor(Math.random() * 2)]
@@ -27,6 +32,7 @@
             var blur = [3, 4, 6, 7];
             var trial_types = [];
             for (const i of words) {
+                console.log(i);
                 for (const j of test_m) {
                     for (const k of target_m) {
                         for (const l of blur) {
@@ -36,7 +42,6 @@
                 }
             }
             var attentionProbeList = ["up", "down", "none"];
-
             var timeline_variables = [];
             for (const i of trial_types) {
                 s = 'stimuli/'
@@ -47,7 +52,8 @@
                 // console.log(attentionProbe)
                 attentionProbeDelay = (Math.random() * (6000 - 3000) + 3000)
                 timeline_variables.push({
-                    target_stimulus: target, test_stimulus: test,
+                    target_stimulus: target,
+                    test_stimulus: test,
                     targetBlur : blur,
                     attentionProbe : attentionProbe,
                     attentionProbeDelay : attentionProbeDelay,
@@ -58,25 +64,60 @@
             var prac_timeline_variables = []
             while (prac_timeline_variables.length < 10) {
                 // randomly select a trial from all possible trials
-                trial = timeline_variables[Math.floor(Math.random() * timeline_variables.length)];
+                const trial = timeline_variables[Math.floor(Math.random() * timeline_variables.length)];
                 // check whether the selected trial is already part of the practice trials timeline
-                unique = 1;
+                const unique = 1;
                 for (const i of prac_timeline_variables) {
                     if (trial == i) {
                         unique == 0;
                     }
                 }
                 // only add the selected trial to the practice timeline if it is new
-                if (unique = 1) {
+                if (unique == 1) {
                     prac_timeline_variables.push(trial)
                 }
             }
 
-            // ensure that the sets of words used for practice and test are disjoint
-            // for (const i of prac_timeline_variables) {
-            //
-            // }
-
+            var prac_word_1 = w_choices[Math.floor(Math.random() * w_choices.length)];
+            w_choices.splice(w_choices.indexOf(prac_word_1),1);
+            var prac_word_2 = w_choices[Math.floor(Math.random() * w_choices.length)];
+            w_choices.splice(w_choices.indexOf(prac_word_2),1);
+            var prac_word_3 = w_choices[Math.floor(Math.random() * w_choices.length)];
+            w_choices.splice(w_choices.indexOf(prac_word_3),1);
+            var prac_word_4 = w_choices[Math.floor(Math.random() * w_choices.length)];
+            w_choices.splice(w_choices.indexOf(prac_word_4),1);
+            console.log(word_1, word_2, word_3, word_4);
+            console.log(prac_word_1, prac_word_2, prac_word_3, prac_word_4);
+            for (const i of prac_timeline_variables) {
+                var old_test = i.test_stimulus.slice(8,12);
+                switch(old_test) {
+                    case word_1:
+                        i.test_stimulus = i.test_stimulus.replace(word_1, prac_word_1);
+                        break;
+                    case word_2:
+                        i.test_stimulus = i.test_stimulus.replace(word_2, prac_word_2);
+                        break;
+                    case word_3:
+                        i.test_stimulus = i.test_stimulus.replace(word_3, prac_word_3);
+                        break;
+                    default:
+                        i.test_stimulus = i.test_stimulus.replace(word_4, prac_word_4);
+                }
+                var old_target = i.target_stimulus.slice(8,12);
+                switch(old_target) {
+                    case word_1:
+                        i.target_stimulus = i.target_stimulus.replace(word_1, prac_word_1);
+                        break;
+                    case word_2:
+                        i.target_stimulus = i.target_stimulus.replace(word_2, prac_word_2);
+                        break;
+                    case word_3:
+                        i.target_stimulus = i.target_stimulus.replace(word_3, prac_word_3);
+                        break;
+                    default:
+                        i.target_stimulus = i.target_stimulus.replace(word_4, prac_word_4);
+                }
+            }
 
             // define all timelines
             var timeline = []; // master timeline
@@ -189,8 +230,6 @@
 
             // add the practice timeline to the master timeline
             timeline = timeline.concat(practiceTimeline);
-
-            console.log(timeline);
 
             var start_instructions = {
                 type: 'html-keyboard-response',

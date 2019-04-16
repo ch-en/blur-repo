@@ -181,11 +181,13 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
             rt: null,
             response: null
         };
+        var response_history = [];
         // store attentionResponse
         var attentionResponse = {
             rt: null,
             key: null
         };
+
 
         // make the parameter in the timeline so you can store it
 
@@ -195,8 +197,18 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
 
         display_element.querySelector('#jspsych-image-slider-response-response').addEventListener('mousemove', function() {
             response.response = display_element.querySelector('#jspsych-image-slider-response-response').value;
-
-            // console.log(response.response)
+            var last_response = null;
+            if (response_history.length == 0) {
+                response_history.push(response.response, performance.now());
+                last_response = parseFloat(response_history[0][0]);
+                console.log(last_response);
+                console.log(response_history);
+            }
+            if (Math.abs(parseFloat(response.response) - last_response > 5)) {
+                response_history.push([response.response, performance.now()]);
+                last_response = parseFloat(response_history[response_history.length - 1][0]);
+                console.log(last_response);
+            }
             document.querySelector("#key").style.filter = "blur("+ response.response + "px)";
             // console.log(document.querySelector("#key"))
         });
