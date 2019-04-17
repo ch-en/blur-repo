@@ -44,7 +44,6 @@
                 }
             }
             var attentionProbeList = ["up", "down", "none"];
-            var practiceAttentionProbeList = ["up", "down"];
             var timeline_variables = [];
             for (const i of trial_types) {
                 s = 'stimuli/'
@@ -121,6 +120,12 @@
                         i.target_stimulus = i.target_stimulus.replace(word_4, prac_word_4);
                 }
             }
+            for (const i of prac_timeline_variables){
+                if(i.attentionProbe == "none"){
+                    console.log(i.attentionProbe);
+                    i.attentionProbe = "up";
+                }
+            }
 
             // define all timelines
             var timeline = []; // master timeline
@@ -186,7 +191,7 @@
                 target_stimulus: jsPsych.timelineVariable('target_stimulus'),
                 test_stimulus: jsPsych.timelineVariable('test_stimulus'),
                 targetBlur: jsPsych.timelineVariable('targetBlur'),
-                attentionProbe: jsPsych.timelineVariable('practiceAttentionProbe'),
+                attentionProbe: jsPsych.timelineVariable('attentionProbe'),
                 attentionProbeDuration: jsPsych.timelineVariable('attentionProbeDuration'),
                 attentionProbeDelay: jsPsych.timelineVariable('attentionProbeDelay'),
                 attention_response_ends_trial: true
