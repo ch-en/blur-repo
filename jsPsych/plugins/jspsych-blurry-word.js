@@ -102,14 +102,11 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
     }
 
     plugin.trial = function(display_element, trial) {
-        console.log(trial);
 
         var html = '<div id="jspsych-image-slider-response-wrapper" style="margin: 0px 0px; position: relative;">';
 
         var attn_left_offset = (Math.random() * (100 - 0) + 0);
         var attn_top_offset = (Math.random() * (100 - 0) + 0);
-        console.log(attn_top_offset);
-        console.log(attn_left_offset);
 
         // ATTENTION PROBE
         if(trial.attentionProbe == "up"){
@@ -201,13 +198,12 @@ jsPsych.plugins['jspsych-blurry-word'] = (function(){
             if (response_history.length == 0) {
                 response_history.push(response.response, performance.now());
                 last_response = parseFloat(response_history[0][0]);
-                console.log(last_response);
-                console.log(response_history);
+
             }
             if (Math.abs(parseFloat(response.response) - last_response > 5)) {
                 response_history.push([response.response, performance.now()]);
                 last_response = parseFloat(response_history[response_history.length - 1][0]);
-                console.log(last_response);
+
             }
             document.querySelector("#key").style.filter = "blur("+ response.response + "px)";
             // console.log(document.querySelector("#key"))
