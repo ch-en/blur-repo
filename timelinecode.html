@@ -193,7 +193,7 @@
 
             // add 3 blur practice trials to blur practice timeline
             var blur_practice_timeline_variables = prac_timeline_variables.slice(0,3);
-            for (const i of blur_practice_timeline_variables) {
+            for (var i of blur_practice_timeline_variables) {
                 i.attention_probe = "none";
             }
             var blur_practice = {
@@ -206,16 +206,15 @@
 
             // add 3 probe practice trials to probe practice timeline
             var probe_practice_timeline_variables = prac_timeline_variables.slice(3,6);
-            for (const i of probe_practice_timeline_variables) {
+            for (var i of probe_practice_timeline_variables) {
                 var rand = Math.random();
                 if (rand < 0.5) {
-                    i.attention_probe = "up";
+                    i.attentionProbe = "up";
                 }
                 else {
-                    i.attention_probe = "down";
+                    i.attentionProbe = "down";
                 }
             }
-            console.log(probe_practice_timeline_variables);
             var probe_practice = {
                 timeline: [probe_trial],
                 timeline_variables: probe_practice_timeline_variables,
