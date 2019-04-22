@@ -120,11 +120,6 @@
                         i.target_stimulus = i.target_stimulus.replace(word_4, prac_word_4);
                 }
             }
-            for (const i of prac_timeline_variables){
-                if(i.attentionProbe == "none"){
-                    i.attentionProbe = "up";
-                }
-            }
 
             // define all timelines
             var timeline = []; // master timeline
@@ -197,18 +192,33 @@
             }
 
             // add 3 blur practice trials to blur practice timeline
+            var blur_practice_timeline_variables = prac_timeline_variables.slice(0,3);
+            for (const i of blur_practice_timeline_variables) {
+                i.attention_probe = "none";
+            }
             var blur_practice = {
                 timeline: [trial],
-                timeline_variables: prac_timeline_variables.slice(0,3),
+                timeline_variables: blur_practice_timeline_variables,
                 randomize_order: true,
                 repetitions: 1
             }
             blurPracticeTimeline.push(blur_practice);
 
             // add 3 probe practice trials to probe practice timeline
+            var probe_practice_timeline_variables = prac_timeline_variables.slice(3,6);
+            for (const i of probe_practice_timeline_variables) {
+                var rand = Math.random();
+                if (rand < 0.5) {
+                    i.attention_probe = "up";
+                }
+                else {
+                    i.attention_probe = "down";
+                }
+            }
+            console.log(probe_practice_timeline_variables);
             var probe_practice = {
                 timeline: [probe_trial],
-                timeline_variables: prac_timeline_variables.slice(3,6),
+                timeline_variables: probe_practice_timeline_variables,
                 randomize_order: true,
                 repetitions: 1
             }
